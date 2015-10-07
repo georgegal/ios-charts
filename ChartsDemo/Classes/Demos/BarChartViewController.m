@@ -55,40 +55,26 @@
     
     _chartView.maxVisibleValueCount = 60;
     _chartView.pinchZoomEnabled = NO;
-    _chartView.drawGridBackgroundEnabled = NO;
+    _chartView.doubleTapToZoomEnabled = NO;
+
+    _chartView.drawBordersEnabled = NO;
+    _chartView.leftAxis.enabled = NO;
+    _chartView.rightAxis.enabled = NO;
+    _chartView.xAxis.enabled = NO;
+    _chartView.legend.enabled = NO;
+    [_chartView setScaleEnabled:NO];
+    _chartView.disableHighlightToggle = YES;
     
-    ChartXAxis *xAxis = _chartView.xAxis;
-    xAxis.labelPosition = XAxisLabelPositionBottom;
-    xAxis.labelFont = [UIFont systemFontOfSize:10.f];
-    xAxis.drawGridLinesEnabled = NO;
-    xAxis.spaceBetweenLabels = 2.0;
-    
-    ChartYAxis *leftAxis = _chartView.leftAxis;
-    leftAxis.labelFont = [UIFont systemFontOfSize:10.f];
-    leftAxis.labelCount = 8;
-    leftAxis.valueFormatter = [[NSNumberFormatter alloc] init];
-    leftAxis.valueFormatter.maximumFractionDigits = 1;
-    leftAxis.valueFormatter.negativeSuffix = @" $";
-    leftAxis.valueFormatter.positiveSuffix = @" $";
-    leftAxis.labelPosition = YAxisLabelPositionOutsideChart;
-    leftAxis.spaceTop = 0.15;
-    
-    ChartYAxis *rightAxis = _chartView.rightAxis;
-    rightAxis.drawGridLinesEnabled = NO;
-    rightAxis.labelFont = [UIFont systemFontOfSize:10.f];
-    rightAxis.labelCount = 8;
-    rightAxis.valueFormatter = leftAxis.valueFormatter;
-    rightAxis.spaceTop = 0.15;
-    
-    _chartView.legend.position = ChartLegendPositionBelowChartLeft;
-    _chartView.legend.form = ChartLegendFormSquare;
-    _chartView.legend.formSize = 9.0;
-    _chartView.legend.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:11.f];
-    _chartView.legend.xEntrySpace = 4.0;
-    
-    _sliderX.value = 11.0;
+    _sliderX.value = 6.0;
     _sliderY.value = 50.0;
     [self slidersValueChanged:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    // select first chart index
+    [_chartView highlightValueWithXIndex:0 dataSetIndex:0 callDelegate:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -103,7 +89,8 @@
     
     for (int i = 0; i < count; i++)
     {
-        [xVals addObject:months[i % 12]];
+        NSString *month = months[i % 12];
+        [xVals addObject:month.uppercaseString];
     }
     
     NSMutableArray *yVals = [[NSMutableArray alloc] init];
@@ -117,12 +104,28 @@
     
     BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:@"DataSet"];
     set1.barSpace = 0.35;
+    NSMutableArray *colors = [NSMutableArray new];
+    for (int i = 0; i < set1.entryCount; i ++) {
+        if (i == set1.entryCount - 1) {
+            [colors addObject:[UIColor clearColor]];
+        } else {
+            [colors addObject:[UIColor colorWithRed:138/255. green:144/255. blue:149/255. alpha:0.85]];
+        }
+    }
+    set1.colors = colors;
+    set1.highlightColor = [UIColor colorWithRed:228/255. green:221/255. blue:213/255. alpha:0.85];
+    set1.highLightAlpha = 1;
+    set1.strokeColor = [UIColor colorWithRed:138/255. green:144/255. blue:149/255. alpha:0.85];
+    set1.barSpace = 0.5;
+    set1.useXLabelsInsteadOfValues = YES;
     
     NSMutableArray *dataSets = [[NSMutableArray alloc] init];
     [dataSets addObject:set1];
     
     BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSets:dataSets];
     [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:10.f]];
+    [data setValueTextColor:[UIColor colorWithRed:138/255. green:144/255. blue:149/255. alpha:0.85]];
+    [data setHighlightEnabled:YES];
     
     _chartView.data = data;
 }

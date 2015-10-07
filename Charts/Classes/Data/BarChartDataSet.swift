@@ -27,6 +27,9 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     /// the color used for drawing the bar-shadows. The bar shadows is a surface behind the bar that indicates the maximum value
     public var barShadowColor = UIColor(red: 215.0/255.0, green: 215.0/255.0, blue: 215.0/255.0, alpha: 1.0)
     
+    /// the color used for drawing the bar, when the color for current bar is clearColor
+    public var strokeColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.098/255.0, alpha: 0.22)
+    
     /// the alpha value (transparency) that is used for drawing the highlight indicator bar. min = 0.0 (fully transparent), max = 1.0 (fully opaque)
     public var highLightAlpha = CGFloat(120.0 / 255.0)
     

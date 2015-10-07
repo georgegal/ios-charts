@@ -33,6 +33,9 @@ public class ChartDataSet: NSObject
     public var visible = true
     public var drawValuesEnabled = true
     
+    /// on top of bars use x - labels values, instead of numeric y - values
+    public var useXLabelsInsteadOfValues = false
+    
     /// the color used for the value-text
     public var valueTextColor: UIColor = UIColor.blackColor()
     

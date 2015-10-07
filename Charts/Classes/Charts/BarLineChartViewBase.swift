@@ -33,6 +33,9 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     private var _scaleXEnabled = true
     private var _scaleYEnabled = true
     
+    /// disable unselect action for current selected bar
+    public var disableHighlightToggle = false
+    
     /// the color for the background of the chart-drawing area (everything behind the grid lines).
     public var gridBackgroundColor = UIColor(red: 240/255.0, green: 240/255.0, blue: 240/255.0, alpha: 1.0)
     
@@ -639,8 +642,10 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
             
             if (h === nil || h!.isEqual(self.lastHighlighted))
             {
-                self.highlightValue(highlight: nil, callDelegate: true)
-                self.lastHighlighted = nil
+                if !disableHighlightToggle {
+                    self.highlightValue(highlight: nil, callDelegate: true)
+                    self.lastHighlighted = nil
+                }
             }
             else
             {

@@ -453,9 +453,23 @@ public class BarChartRenderer: ChartDataRendererBase
                                 
                                 let value = formatter!.stringFromNumber(vals[k])!
                                 
-                                stringValues.append(value)
-                                xPositions.append(xPos)
-                                yPositions.append(yPos)
+                                if dataSet.displayFirstValueOnly {
+                                    if k == 0
+                                    {
+                                        stringValues.append(value)
+                                    }
+                                    else if k == transformed.count - 1
+                                    {
+                                        xPositions.append(xPos)
+                                        yPositions.append(yPos)
+                                    }
+                                }
+                                else
+                                {
+                                    stringValues.append(value)
+                                    xPositions.append(xPos)
+                                    yPositions.append(yPos)
+                                }
                             }
                         }
                     }

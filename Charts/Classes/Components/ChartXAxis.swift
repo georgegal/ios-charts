@@ -30,6 +30,7 @@ public class ChartXAxis: ChartAxisBase
     public var values = [String?]()
     public var labelWidth = CGFloat(1.0)
     public var labelHeight = CGFloat(1.0)
+    public var aditionalLabelYOffset = CGFloat(4.0)
     
     /// the space that should be left out (in characters) between the x-axis labels
     /// This only applies if the number of labels that will be skipped in between drawn axis labels is not custom set.

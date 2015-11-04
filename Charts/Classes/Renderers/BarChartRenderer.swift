@@ -415,47 +415,60 @@ public class BarChartRenderer: ChartDataRendererBase
                             var posY = 0.0
                             var negY = -e.negativeSum
                             
-                            for (var k = 0; k < vals.count; k++)
+                            if dataSet.displayFirstValueOnly
                             {
-                                let value = vals[k]
-                                var y: Double
-                                
-                                if value >= 0.0
-                                {
-                                    posY += value
-                                    y = posY
-                                }
-                                else
-                                {
-                                    y = negY
-                                    negY -= value
-                                }
-                                
-                                transformed.append(CGPoint(x: 0.0, y: CGFloat(y) * _animator.phaseY))
-                            }
-                            
-                            trans.pointValuesToPixel(&transformed)
-                            
-                            for (var k = 0; k < transformed.count; k++)
-                            {
+                                let value = formatter!.stringFromNumber(vals[0])!
                                 let xPos = valuePoints[j].x
-                                let yPos = transformed[k].y + (vals[k] >= 0 ? posOffset : negOffset)
-                                
-                                if (!viewPortHandler.isInBoundsRight(xPos))
-                                {
-                                    break
-                                }
-                                
-                                if (!viewPortHandler.isInBoundsY(yPos) || !viewPortHandler.isInBoundsLeft(xPos))
-                                {
-                                    continue
-                                }
-                                
-                                let value = formatter!.stringFromNumber(vals[k])!
+                                let yPos = valuePoints[j].y + (vals[0] >= 0 ? posOffset : negOffset)
                                 
                                 stringValues.append(value)
                                 xPositions.append(xPos)
                                 yPositions.append(yPos)
+                            }
+                            else
+                            {
+                                for (var k = 0; k < vals.count; k++)
+                                {
+                                    let value = vals[k]
+                                    var y: Double
+                                    
+                                    if value >= 0.0
+                                    {
+                                        posY += value
+                                        y = posY
+                                    }
+                                    else
+                                    {
+                                        y = negY
+                                        negY -= value
+                                    }
+                                    
+                                    transformed.append(CGPoint(x: 0.0, y: CGFloat(y) * _animator.phaseY))
+                                }
+                                
+                                trans.pointValuesToPixel(&transformed)
+                                
+                                for (var k = 0; k < transformed.count; k++)
+                                {
+                                    let xPos = valuePoints[j].x
+                                    let yPos = transformed[k].y + (vals[k] >= 0 ? posOffset : negOffset)
+                                    
+                                    if (!viewPortHandler.isInBoundsRight(xPos))
+                                    {
+                                        break
+                                    }
+                                    
+                                    if (!viewPortHandler.isInBoundsY(yPos) || !viewPortHandler.isInBoundsLeft(xPos))
+                                    {
+                                        continue
+                                    }
+                                    
+                                    let value = formatter!.stringFromNumber(vals[k])!
+                                    
+                                    stringValues.append(value)
+                                    xPositions.append(xPos)
+                                    yPositions.append(yPos)
+                                }
                             }
                         }
                     }

@@ -39,6 +39,9 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     /// array of labels used to describe the different values of the stacked bars
     public var stackLabels: [String] = ["Stack"]
     
+    /// if true, on top of the bars will be displaied first value from the stack only (works with stacked data set)
+    public var displayFirstValueOnly = false
+    
     public required init()
     {
         super.init()

@@ -50,32 +50,45 @@
     _chartView.descriptionText = @"";
     _chartView.noDataTextDescription = @"You need to provide data for the chart.";
     
-    _chartView.maxVisibleValueCount = 60;
     _chartView.pinchZoomEnabled = NO;
     _chartView.drawGridBackgroundEnabled = NO;
     _chartView.drawBarShadowEnabled = NO;
-    _chartView.drawValueAboveBarEnabled = NO;
+    _chartView.drawValueAboveBarEnabled = YES;
     
-    ChartYAxis *leftAxis = _chartView.leftAxis;
-    leftAxis.valueFormatter = [[NSNumberFormatter alloc] init];
-    leftAxis.valueFormatter.maximumFractionDigits = 1;
-    leftAxis.valueFormatter.negativeSuffix = @" $";
-    leftAxis.valueFormatter.positiveSuffix = @" $";
+    _chartView.maxVisibleValueCount = 60;
+    _chartView.pinchZoomEnabled = NO;
+    _chartView.doubleTapToZoomEnabled = NO;
     
+    _chartView.drawBordersEnabled = NO;
+    _chartView.leftAxis.enabled = NO;
     _chartView.rightAxis.enabled = NO;
+    _chartView.xAxis.enabled = YES;
+    _chartView.legend.enabled = NO;
+    [_chartView setScaleEnabled:NO];
+    _chartView.dragEnabled = YES;
+    [_chartView zoom:1.5 scaleY:1 x:200 y:0];
     
     ChartXAxis *xAxis = _chartView.xAxis;
-    xAxis.labelPosition = XAxisLabelPositionTop;
+    xAxis.labelPosition = XAxisLabelPositionBottom;
+    xAxis.labelFont = [UIFont systemFontOfSize:10.f];
+    xAxis.drawAxisLineEnabled = NO;
+    xAxis.drawGridLinesEnabled = NO;
+    xAxis.gridLineWidth = .3;
     
-    ChartLegend *l = _chartView.legend;
-    l.position = ChartLegendPositionBelowChartRight;
-    l.form = ChartLegendFormSquare;
-    l.formSize = 8.0;
-    l.formToTextSpace = 4.0;
-    l.xEntrySpace = 6.0;
+    ChartLimitLine *ll1 = [[ChartLimitLine alloc] initWithLimit:11000.0 label:@"Average"];
+    ll1.lineWidth = 0.5;
+    ll1.lineDashLengths = @[@4.f, @4.f];
+    ll1.labelPosition = ChartLimitLabelPositionRightBottom;
+    ll1.valueFont = [UIFont systemFontOfSize:10.0];
+    ll1.lineColor = [UIColor grayColor];
     
-    _sliderX.value = 11.0;
-    _sliderY.value = 100.0;
+    ChartYAxis *leftAxis = _chartView.leftAxis;
+    [leftAxis removeAllLimitLines];
+    [leftAxis addLimitLine:ll1];
+    leftAxis.startAtZeroEnabled = NO;
+    
+    _sliderX.value = 12.0;
+    _sliderY.value = 15000.0;
     [self slidersValueChanged:nil];
 }
 
@@ -95,28 +108,44 @@
     }
     
     NSMutableArray *yVals = [[NSMutableArray alloc] init];
+    NSMutableArray *randomYVals = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < count; i++)
     {
-        double mult = (range + 1);
+        double mult = (15000 + 1);
         double val1 = (double) (arc4random_uniform(mult) + mult / 3);
-        double val2 = (double) (arc4random_uniform(mult) + mult / 3);
-        double val3 = (double) (arc4random_uniform(mult) + mult / 3);
         
-        [yVals addObject:[[BarChartDataEntry alloc] initWithValues:@[@(val1), @(val2), @(val3)] xIndex:i]];
+        [randomYVals addObject:@(val1)];
+    }
+    
+    double max = 0;
+    for (NSNumber *val in randomYVals) {
+        if (val.doubleValue > max) {
+            max = val.doubleValue;
+        }
+    }
+    
+    for (NSNumber *val in randomYVals) {
+        NSInteger index = [randomYVals indexOfObject:val];
+        double val2 = max - val.doubleValue;
+        [yVals addObject:[[BarChartDataEntry alloc] initWithValues:@[val, @(val2)] xIndex:index]];
     }
     
     BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:@"Statistics Vienna 2014"];
-    set1.colors = @[ChartColorTemplates.vordiplom[0], ChartColorTemplates.vordiplom[1], ChartColorTemplates.vordiplom[2]];
-    set1.stackLabels = @[@"Births", @"Divorces", @"Marriages"];
+    set1.colors = @[ChartColorTemplates.vordiplom[0], [UIColor lightGrayColor]];
+    set1.stackLabels = @[@"Births", @"Divorces"];
+    set1.highlightColor = [UIColor colorWithRed:228/255. green:221/255. blue:213/255. alpha:0.85];
+    set1.highLightAlpha = 1;
+    set1.strokeColor = [UIColor colorWithRed:138/255. green:144/255. blue:149/255. alpha:0.85];
+    set1.highlightEnabled = NO;
+    set1.barSpace = 0.3;
+    set1.displayFirstValueOnly = YES;
     
     NSMutableArray *dataSets = [[NSMutableArray alloc] init];
     [dataSets addObject:set1];
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.maximumFractionDigits = 1;
-    formatter.negativeSuffix = @" $";
-    formatter.positiveSuffix = @" $";
     
     BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSets:dataSets];
     [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:7.f]];

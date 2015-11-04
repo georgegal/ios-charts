@@ -26,6 +26,7 @@ public protocol BarChartRendererDelegate
     func barChartRendererChartYMin(renderer: BarChartRenderer) -> Double
     func barChartRendererChartXMax(renderer: BarChartRenderer) -> Double
     func barChartRendererChartXMin(renderer: BarChartRenderer) -> Double
+    func barChartBarBorderLineWidth(renderer: BarChartRenderer) -> CGFloat
     func barChartIsDrawHighlightArrowEnabled(renderer: BarChartRenderer) -> Bool
     func barChartIsDrawValueAboveBarEnabled(renderer: BarChartRenderer) -> Bool
     func barChartIsDrawBarShadowEnabled(renderer: BarChartRenderer) -> Bool
@@ -144,7 +145,7 @@ public class BarChartRenderer: ChartDataRendererBase
                     CGContextFillRect(context, barShadow)
                 }
                 
-                fillOrStrokeRect(context: context, dataSet: dataSet, index: j, rect: barRect)
+                fillAndStrokeRect(context: context, dataSet: dataSet, xIndex: j, stackIndex: 0, rect: barRect)
             }
             else
             {
@@ -243,7 +244,7 @@ public class BarChartRenderer: ChartDataRendererBase
                         break
                     }
                     
-                    fillOrStrokeRect(context: context, dataSet: dataSet, index: k, rect: barRect)
+                    fillAndStrokeRect(context: context, dataSet: dataSet, xIndex: j, stackIndex: k, rect: barRect)
                 }
             }
         }
@@ -415,47 +416,66 @@ public class BarChartRenderer: ChartDataRendererBase
                             var posY = 0.0
                             var negY = -e.negativeSum
                             
-                            for (var k = 0; k < vals.count; k++)
+                            if dataSet.displayFirstValueOnly
                             {
-                                let value = vals[k]
-                                var y: Double
+                                var value = String()
                                 
-                                if value >= 0.0
-                                {
-                                    posY += value
-                                    y = posY
-                                }
-                                else
-                                {
-                                    y = negY
-                                    negY -= value
+                                if (vals[0] == NSNumber(double: 0) && dataSet.displayZeroValues) ||
+                                    vals[0] != NSNumber(double: 0) {
+                                        value = formatter!.stringFromNumber(vals[0])!
                                 }
                                 
-                                transformed.append(CGPoint(x: 0.0, y: CGFloat(y) * _animator.phaseY))
-                            }
-                            
-                            trans.pointValuesToPixel(&transformed)
-                            
-                            for (var k = 0; k < transformed.count; k++)
-                            {
                                 let xPos = valuePoints[j].x
-                                let yPos = transformed[k].y + (vals[k] >= 0 ? posOffset : negOffset)
-                                
-                                if (!viewPortHandler.isInBoundsRight(xPos))
-                                {
-                                    break
-                                }
-                                
-                                if (!viewPortHandler.isInBoundsY(yPos) || !viewPortHandler.isInBoundsLeft(xPos))
-                                {
-                                    continue
-                                }
-                                
-                                let value = formatter!.stringFromNumber(vals[k])!
+                                let yPos = valuePoints[j].y + (vals[0] >= 0 ? posOffset : negOffset)
                                 
                                 stringValues.append(value)
                                 xPositions.append(xPos)
                                 yPositions.append(yPos)
+                            }
+                            else
+                            {
+                                for (var k = 0; k < vals.count; k++)
+                                {
+                                    let value = vals[k]
+                                    var y: Double
+                                    
+                                    if value >= 0.0
+                                    {
+                                        posY += value
+                                        y = posY
+                                    }
+                                    else
+                                    {
+                                        y = negY
+                                        negY -= value
+                                    }
+                                    
+                                    transformed.append(CGPoint(x: 0.0, y: CGFloat(y) * _animator.phaseY))
+                                }
+                                
+                                trans.pointValuesToPixel(&transformed)
+                                
+                                for (var k = 0; k < transformed.count; k++)
+                                {
+                                    let xPos = valuePoints[j].x
+                                    let yPos = transformed[k].y + (vals[k] >= 0 ? posOffset : negOffset)
+                                    
+                                    if (!viewPortHandler.isInBoundsRight(xPos))
+                                    {
+                                        break
+                                    }
+                                    
+                                    if (!viewPortHandler.isInBoundsY(yPos) || !viewPortHandler.isInBoundsLeft(xPos))
+                                    {
+                                        continue
+                                    }
+                                    
+                                    let value = formatter!.stringFromNumber(vals[k])!
+                                    
+                                    stringValues.append(value)
+                                    xPositions.append(xPos)
+                                    yPositions.append(yPos)
+                                }
                             }
                         }
                     }
@@ -547,6 +567,7 @@ public class BarChartRenderer: ChartDataRendererBase
 
                 prepareBarHighlight(x: x, y1: y1, y2: y2, barspacehalf: barspaceHalf, trans: trans, rect: &barRect)
                 
+                // TO DO: update hightlight logic
                 if set.colorAt(index) == UIColor.clearColor() {
                     CGContextStrokeRect(context, barRect)
                 } else {
@@ -614,15 +635,44 @@ public class BarChartRenderer: ChartDataRendererBase
     
     // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
     // After, fill or stroke given rect.
-    internal func fillOrStrokeRect(context context: CGContext?, dataSet: BarChartDataSet, index: Int, rect: CGRect) {
+    internal func fillAndStrokeRect(context context: CGContext?, dataSet: BarChartDataSet, xIndex: Int, stackIndex: Int, rect: CGRect) {
         
-        CGContextSetFillColorWithColor(context, dataSet.colorAt(index).CGColor)
-        CGContextSetStrokeColorWithColor(context, dataSet.strokeColor.CGColor)
-        
-        if dataSet.colorAt(index) == UIColor.clearColor() {
-            CGContextStrokeRect(context, rect)
+        // fill rect with color
+        if dataSet.isStacked {
+            let color = dataSet.colors[(xIndex) * (dataSet.stackSize) + stackIndex]
+            CGContextSetFillColorWithColor(context, color.CGColor)
         } else {
-            CGContextFillRect(context, rect)
+            CGContextSetFillColorWithColor(context, dataSet.colorAt(xIndex).CGColor)
+        }
+        CGContextFillRect(context, rect)
+        
+        // stroke rect with options
+        let index = BarChartStakedIndex(xIndex: xIndex, stackIndex: stackIndex)
+        if let strokeOptions = dataSet.strokeOptions[index] {
+            let strokeColor = strokeOptions.strokeColor
+            let strokeStyle = strokeOptions.strokeStyle
+            
+            CGContextSetStrokeColorWithColor(context, strokeColor.CGColor)
+            
+            var lengths: [CGFloat]?
+            
+            switch strokeStyle {
+            case .Solid:
+                lengths = nil
+            case .Dashed:
+                lengths = [4, 3]
+            case .Dotted:
+                lengths = [1, 1]
+            }
+            
+            if let lengths = lengths {
+                CGContextSetLineDash(context, 0, lengths, lengths.count)
+            } else {
+                CGContextSetLineDash(context, 0, nil, 0)
+            }
+            
+            let lineWidth = delegate!.barChartBarBorderLineWidth(self)
+            CGContextStrokeRect(context, CGRectInset(rect, lineWidth, 0))
         }
     }
 }

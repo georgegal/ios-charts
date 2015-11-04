@@ -115,7 +115,18 @@
     set1.colors = colors;
     set1.highlightColor = [UIColor colorWithRed:228/255. green:221/255. blue:213/255. alpha:0.85];
     set1.highLightAlpha = 1;
-    set1.strokeColor = [UIColor colorWithRed:138/255. green:144/255. blue:149/255. alpha:0.85];
+    
+    BarChartStakedIndex *index = [[BarChartStakedIndex alloc] initWithXIndex:set1.entryCount - 1 stackIndex:0];
+    
+    UIColor *strokeColor = [UIColor redColor];
+    BarChartStrokeStyle strokeStyle = BarChartStrokeStyleDotted;
+    
+    BarChartStrokeOption *strokeOption = [[BarChartStrokeOption alloc] initWithStrokeColor:strokeColor
+                                                                               strokeStyle:strokeStyle];
+    NSMutableDictionary *strokeOptions = set1.strokeOptions.mutableCopy;
+    strokeOptions[index] = strokeOption;
+    set1.strokeOptions = strokeOptions;
+    
     set1.barSpace = 0.5;
     set1.useXLabelsInsteadOfValues = YES;
     

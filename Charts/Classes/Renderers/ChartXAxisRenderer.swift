@@ -287,7 +287,7 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
             {
                 let labelLineHeight = l.valueFont.lineHeight
                 
-                let add = CGFloat(4.0)
+                let add = _xAxis.aditionalLabelYOffset
                 let xOffset: CGFloat = l.lineWidth
                 let yOffset: CGFloat = add / 2.0
                 

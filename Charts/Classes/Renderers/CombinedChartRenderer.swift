@@ -242,6 +242,11 @@ public class CombinedChartRenderer: ChartDataRendererBase,
         return _chart.chartXMin
     }
     
+    public func barChartBarBorderLineWidth(renderer: BarChartRenderer) -> CGFloat
+    {
+        return _chart.borderLineWidth
+    }
+    
     public func barChartIsDrawHighlightArrowEnabled(renderer: BarChartRenderer) -> Bool
     {
         return drawHighlightArrowEnabled

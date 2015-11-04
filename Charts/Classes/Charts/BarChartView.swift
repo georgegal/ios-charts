@@ -209,6 +209,11 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
         return chartXMin
     }
     
+    public func barChartBarBorderLineWidth(renderer: BarChartRenderer) -> CGFloat
+    {
+        return borderLineWidth
+    }
+    
     public func barChartIsDrawHighlightArrowEnabled(renderer: BarChartRenderer) -> Bool
     {
         return drawHighlightArrowEnabled

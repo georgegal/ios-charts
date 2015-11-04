@@ -15,6 +15,74 @@ import Foundation
 import CoreGraphics
 import UIKit
 
+@objc
+public enum BarChartStrokeStyle: Int
+{
+    case Solid
+    case Dashed
+    case Dotted
+}
+
+public class BarChartStakedIndex: NSObject, NSCopying
+{
+    public var xIndex: Int = 0
+    public var stackIndex: Int = 0
+    
+    public override required init()
+    {
+        super.init()
+    }
+    
+    public init(xIndex: Int, stackIndex: Int)
+    {
+        super.init()
+        self.xIndex = xIndex
+        self.stackIndex = stackIndex
+    }
+    
+    // MARK: NSCopying
+    
+    public func copyWithZone(zone: NSZone) -> AnyObject
+    {
+        let copy = self.dynamicType.init()
+        
+        copy.xIndex = xIndex
+        copy.stackIndex = stackIndex
+        
+        return copy
+    }
+    
+    // MARK: Hashable
+    
+    public override var hashValue: Int {
+        return "\(self.xIndex), \(self.stackIndex)".hash
+    }
+    
+    public override var hash: Int {
+        return self.hashValue
+    }
+    
+    public override func isEqual(object: AnyObject?) -> Bool {
+        return self.xIndex == object?.xIndex && self.stackIndex == object?.stackIndex
+    }
+}
+
+public func ==(lhs: BarChartStakedIndex, rhs: BarChartStakedIndex) -> Bool {
+    return lhs.xIndex == rhs.xIndex && lhs.stackIndex == rhs.stackIndex
+}
+
+public class BarChartStrokeOption: NSObject
+{
+    public var strokeColor: UIColor
+    public var strokeStyle: BarChartStrokeStyle
+    
+    public init(strokeColor: UIColor, strokeStyle: BarChartStrokeStyle)
+    {
+        self.strokeColor = strokeColor
+        self.strokeStyle = strokeStyle
+    }
+}
+
 public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
 {
     /// space indicator between the bars in percentage of the whole width of one value (0.15 == 15% of bar width)
@@ -27,8 +95,8 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     /// the color used for drawing the bar-shadows. The bar shadows is a surface behind the bar that indicates the maximum value
     public var barShadowColor = UIColor(red: 215.0/255.0, green: 215.0/255.0, blue: 215.0/255.0, alpha: 1.0)
     
-    /// the color used for drawing the bar, when the color for current bar is clearColor
-    public var strokeColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.098/255.0, alpha: 0.22)
+    /// bars - stroke options
+    public var strokeOptions = [BarChartStakedIndex : BarChartStrokeOption]()
     
     /// the alpha value (transparency) that is used for drawing the highlight indicator bar. min = 0.0 (fully transparent), max = 1.0 (fully opaque)
     public var highLightAlpha = CGFloat(120.0 / 255.0)
@@ -38,6 +106,12 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     
     /// array of labels used to describe the different values of the stacked bars
     public var stackLabels: [String] = ["Stack"]
+    
+    /// if true, on top of the bars will be displayed first value from the stack only (works with stacked data set)
+    public var displayFirstValueOnly = false
+    
+    /// if true, zero values on x-axis will be displayed
+    public var displayZeroValues = true
     
     public required init()
     {

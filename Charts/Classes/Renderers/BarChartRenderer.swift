@@ -566,10 +566,11 @@ public class BarChartRenderer: ChartDataRendererBase
                 }
 
                 prepareBarHighlight(x: x, y1: y1, y2: y2, barspacehalf: barspaceHalf, trans: trans, rect: &barRect)
-                
-                // TO DO: update hightlight logic
-                if set.colorAt(index) == UIColor.clearColor() {
-                    CGContextStrokeRect(context, barRect)
+
+                let index = BarChartStakedIndex(xIndex: h.xIndex, stackIndex: h.stackIndex < 0 ? 0 : h.stackIndex )
+                if let strokeOptions = set.strokeOptions[index] {
+                    let strokeStyle = strokeOptions.strokeStyle
+                    strokeRect(context: context, rect: barRect, color: set.highlightColor, style: strokeStyle)
                 } else {
                     CGContextFillRect(context, barRect)
                 }
@@ -639,40 +640,44 @@ public class BarChartRenderer: ChartDataRendererBase
         
         // fill rect with color
         if dataSet.isStacked {
-            let color = dataSet.colors[(xIndex) * (dataSet.stackSize) + stackIndex]
+            let color = dataSet.colors[xIndex * dataSet.stackSize + stackIndex]
             CGContextSetFillColorWithColor(context, color.CGColor)
         } else {
             CGContextSetFillColorWithColor(context, dataSet.colorAt(xIndex).CGColor)
         }
         CGContextFillRect(context, rect)
         
-        // stroke rect with options
         let index = BarChartStakedIndex(xIndex: xIndex, stackIndex: stackIndex)
         if let strokeOptions = dataSet.strokeOptions[index] {
             let strokeColor = strokeOptions.strokeColor
             let strokeStyle = strokeOptions.strokeStyle
             
-            CGContextSetStrokeColorWithColor(context, strokeColor.CGColor)
-            
-            var lengths: [CGFloat]?
-            
-            switch strokeStyle {
-            case .Solid:
-                lengths = nil
-            case .Dashed:
-                lengths = [4, 3]
-            case .Dotted:
-                lengths = [1, 1]
-            }
-            
-            if let lengths = lengths {
-                CGContextSetLineDash(context, 0, lengths, lengths.count)
-            } else {
-                CGContextSetLineDash(context, 0, nil, 0)
-            }
-            
-            let lineWidth = delegate!.barChartBarBorderLineWidth(self)
-            CGContextStrokeRect(context, CGRectInset(rect, lineWidth, 0))
+            strokeRect(context: context, rect: rect, color: strokeColor, style: strokeStyle)
         }
+    }
+    
+    // Stroke rect with options
+    internal func strokeRect(context context: CGContext?, rect: CGRect, color: UIColor, style: BarChartStrokeStyle) {
+        CGContextSetStrokeColorWithColor(context, color.CGColor)
+        
+        var lengths: [CGFloat]?
+        
+        switch style {
+        case .Solid:
+            lengths = nil
+        case .Dashed:
+            lengths = [4, 3]
+        case .Dotted:
+            lengths = [1, 1]
+        }
+        
+        if let lengths = lengths {
+            CGContextSetLineDash(context, 0, lengths, lengths.count)
+        } else {
+            CGContextSetLineDash(context, 0, nil, 0)
+        }
+        
+        let lineWidth = delegate!.barChartBarBorderLineWidth(self)
+        CGContextStrokeRect(context, CGRectInset(rect, lineWidth, 0))
     }
 }

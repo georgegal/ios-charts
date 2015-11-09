@@ -118,8 +118,8 @@
     
     BarChartStakedIndex *index = [[BarChartStakedIndex alloc] initWithXIndex:set1.entryCount - 1 stackIndex:0];
     
-    UIColor *strokeColor = [UIColor redColor];
-    BarChartStrokeStyle strokeStyle = BarChartStrokeStyleDotted;
+    UIColor *strokeColor = [UIColor colorWithRed:138/255. green:144/255. blue:149/255. alpha:0.85];
+    BarChartStrokeStyle strokeStyle = BarChartStrokeStyleSolid;
     
     BarChartStrokeOption *strokeOption = [[BarChartStrokeOption alloc] initWithStrokeColor:strokeColor
                                                                                strokeStyle:strokeStyle];

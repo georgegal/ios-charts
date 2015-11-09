@@ -639,12 +639,15 @@ public class BarChartRenderer: ChartDataRendererBase
     internal func fillAndStrokeRect(context context: CGContext?, dataSet: BarChartDataSet, xIndex: Int, stackIndex: Int, rect: CGRect) {
         
         // fill rect with color
-        if dataSet.isStacked {
-            let color = dataSet.colors[xIndex * dataSet.stackSize + stackIndex]
-            CGContextSetFillColorWithColor(context, color.CGColor)
+        var color: UIColor?
+        let colorIndex = xIndex * dataSet.stackSize + stackIndex
+        if dataSet.isStacked && colorIndex < dataSet.colors.count {
+            color = dataSet.colors[colorIndex]
         } else {
-            CGContextSetFillColorWithColor(context, dataSet.colorAt(xIndex).CGColor)
+            color = dataSet.colorAt(xIndex)
         }
+        
+        CGContextSetFillColorWithColor(context, color?.CGColor)
         CGContextFillRect(context, rect)
         
         let index = BarChartStakedIndex(xIndex: xIndex, stackIndex: stackIndex)

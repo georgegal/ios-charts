@@ -752,7 +752,8 @@ public class PieRadarChartViewBase: ChartViewBase
             if (distance > self.radius)
             {
                 // if no slice was touched, highlight nothing
-                self.highlightValues(nil)
+                let callDelegate = _lastHighlight != nil
+                self.highlightValue(highlight: nil, callDelegate: callDelegate)
                 _lastHighlight = nil
                 _lastHighlight = nil
             }

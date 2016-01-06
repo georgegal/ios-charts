@@ -377,6 +377,9 @@ public class ChartViewBase: UIView, ChartAnimatorDelegate
         if (_indicesToHightlight.isEmpty)
         {
             self.lastHighlighted = nil
+        } else
+        {
+            self.lastHighlighted = _indicesToHightlight[0];
         }
 
         // redraw the chart

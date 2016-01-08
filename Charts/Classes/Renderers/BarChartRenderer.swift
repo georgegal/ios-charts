@@ -29,6 +29,7 @@ public protocol BarChartRendererDelegate
     func barChartBarBorderLineWidth(renderer: BarChartRenderer) -> CGFloat
     func barChartIsDrawHighlightArrowEnabled(renderer: BarChartRenderer) -> Bool
     func barChartIsDrawValueAboveBarEnabled(renderer: BarChartRenderer) -> Bool
+    func barChartIsDrawValueHightlightEnabled(renderer: BarChartRenderer) -> Bool
     func barChartIsDrawBarShadowEnabled(renderer: BarChartRenderer) -> Bool
     func barChartIsInverted(renderer: BarChartRenderer, axis: ChartYAxis.AxisDependency) -> Bool
 }
@@ -270,12 +271,11 @@ public class BarChartRenderer: ChartDataRendererBase
         trans.rectValueToPixel(&rect, phaseY: _animator.phaseY)
     }
     
-    public override func drawValues(context context: CGContext?)
-    {
-        guard let drawableOptions = drawOptions() else {
+    public override func drawValues(context context: CGContext?, indices: [ChartHighlight]?) {
+        guard let drawableOptions = drawOptions(indices) else {
             return
         }
-        
+        let hasMultipleTextColors = drawableOptions.textColor.count > 1;
         for var i = 0; i < drawableOptions.values.count; i++ {
             
             drawValue(context: context,
@@ -284,11 +284,17 @@ public class BarChartRenderer: ChartDataRendererBase
                 yPos: drawableOptions.yPositions[i],
                 font: drawableOptions.textFont,
                 align: .Center,
-                color: drawableOptions.textColor)
+                color: (hasMultipleTextColors) ? drawableOptions.textColor[i]: drawableOptions.textColor.first!)
         }
+
     }
     
-    internal func drawOptions() -> (values: [String], xPositions: [CGFloat], yPositions: [CGFloat], textFont: UIFont, textColor: UIColor)? {
+    public override func drawValues(context context: CGContext?)
+    {
+        drawValues(context: context, indices: []);
+    }
+    
+    internal func drawOptions(indices: [ChartHighlight]?) -> (values: [String], xPositions: [CGFloat], yPositions: [CGFloat], textFont: UIFont, textColor: [UIColor])? {
         // if values are drawn
         if (passesCheck())
         {
@@ -325,8 +331,6 @@ public class BarChartRenderer: ChartDataRendererBase
                     negOffset = -negOffset - valueTextHeight
                 }
                 
-                let textColor = dataSet.valueTextColor
-                
                 var formatter = dataSet.valueFormatter
                 if (formatter === nil)
                 {
@@ -345,7 +349,7 @@ public class BarChartRenderer: ChartDataRendererBase
                     var values: [String] = []
                     var xPositions: [CGFloat] = []
                     var yPositions: [CGFloat] = []
-                    
+                    var colors: [UIColor] = []
                     for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j++)
                     {
                         if (!viewPortHandler.isInBoundsRight(valuePoints[j].x))
@@ -364,12 +368,18 @@ public class BarChartRenderer: ChartDataRendererBase
                         let xPos = valuePoints[j].x
                         let yPos = valuePoints[j].y + (val != nil ? posOffset : negOffset)
                         
+                        var color = dataSet.valueTextColor
+                        let results = indices!.filter { $0.xIndex == j}
+                        if(delegate!.barChartIsDrawValueHightlightEnabled(self) && !results.isEmpty) {
+                            color = dataSet.valueHighlightTextColor
+                        }
+                        colors.append(color)
                         values.append(val!)
                         xPositions.append(xPos)
                         yPositions.append(yPos)
                     }
                     
-                    return (values: values, xPositions: xPositions, yPositions: yPositions, textFont: textFont, textColor: textColor)
+                    return (values: values, xPositions: xPositions, yPositions: yPositions, textFont: textFont, textColor: colors)
                 }
                 else
                 {
@@ -401,7 +411,6 @@ public class BarChartRenderer: ChartDataRendererBase
                             let value = formatter!.stringFromNumber(e.value)!
                             let xPos = valuePoints[j].x
                             let yPos = valuePoints[j].y + (e.value >= 0.0 ? posOffset : negOffset)
-                            
                             stringValues.append(value)
                             xPositions.append(xPos)
                             yPositions.append(yPos)
@@ -480,7 +489,7 @@ public class BarChartRenderer: ChartDataRendererBase
                         }
                     }
                     
-                    return (values: stringValues, xPositions: xPositions, yPositions: yPositions, textFont: textFont, textColor: textColor)
+                    return (values: stringValues, xPositions: xPositions, yPositions: yPositions, textFont: textFont, textColor: [dataSet.valueTextColor])
                 }
             }
         }

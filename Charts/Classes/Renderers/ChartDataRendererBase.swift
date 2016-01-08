@@ -34,6 +34,11 @@ public class ChartDataRendererBase: ChartRendererBase
         fatalError("drawValues() cannot be called on ChartDataRendererBase")
     }
     
+    public func drawValues(context context: CGContext?, indices: [ChartHighlight]?)
+    {
+        fatalError("drawValues() cannot be called on ChartDataRendererBase")
+    }
+    
     public func drawExtras(context context: CGContext?)
     {
         fatalError("drawExtras() cannot be called on ChartDataRendererBase")

@@ -39,6 +39,9 @@ public class ChartDataSet: NSObject
     /// the color used for the value-text
     public var valueTextColor: UIColor = UIColor.blackColor()
     
+    /// the color used for the highlighted value-text
+    public var valueHighlightTextColor: UIColor = UIColor.blackColor()
+    
     /// the font for the value-text labels
     public var valueFont: UIFont = UIFont.systemFontOfSize(7.0)
     

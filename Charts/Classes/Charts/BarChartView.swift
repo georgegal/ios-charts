@@ -20,6 +20,9 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
     /// flag that enables or disables the highlighting arrow
     private var _drawHighlightArrowEnabled = false
     
+    /// if set to true, the current selected value text is highlighted
+    private var _drawValueHighlightedEnabled = true
+    
     /// if set to true, all values are drawn above their bars, instead of below their top
     private var _drawValueAboveBarEnabled = true
 
@@ -123,6 +126,17 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
         return Int((pt.x >= CGFloat(chartXMax)) ? CGFloat(chartXMax) / div : (pt.x / div))
     }
 
+    // MARK : Overriden
+    
+    public override func drawRect(rect: CGRect)
+    {
+        super.drawRect(rect)
+        if(valuesToHighlight() && _drawValueHighlightedEnabled) {
+            let context = UIGraphicsGetCurrentContext()
+            renderer!.drawValues(context: context, indices: _indicesToHightlight);
+        }
+    }
+    
     // MARK: Accessors
     
     /// flag that enables or disables the highlighting arrow
@@ -132,6 +146,15 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
         set
         {
             _drawHighlightArrowEnabled = newValue
+            setNeedsDisplay()
+        }
+    }
+    
+    /// if set to true, the current selected value is highlighted
+    public var drawValueHighlightedEnabled: Bool {
+        get { return _drawValueHighlightedEnabled; }
+        set {
+            _drawValueHighlightedEnabled = newValue
             setNeedsDisplay()
         }
     }
@@ -222,6 +245,10 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
     public func barChartIsDrawValueAboveBarEnabled(renderer: BarChartRenderer) -> Bool
     {
         return drawValueAboveBarEnabled
+    }
+    
+    public func barChartIsDrawValueHightlightEnabled(renderer: BarChartRenderer) -> Bool {
+        return drawValueHighlightedEnabled
     }
     
     public func barChartIsDrawBarShadowEnabled(renderer: BarChartRenderer) -> Bool

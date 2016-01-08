@@ -26,6 +26,9 @@ public class CombinedChartRenderer: ChartDataRendererBase,
     /// flag that enables or disables the highlighting arrow
     public var drawHighlightArrowEnabled = false
     
+    /// if set to true, the current selected value text is highlighted
+    public var drawValueHighlightedEnabled = false
+    
     /// if set to true, all values are drawn above their bars, instead of below their top
     public var drawValueAboveBarEnabled = true
     
@@ -250,6 +253,10 @@ public class CombinedChartRenderer: ChartDataRendererBase,
     public func barChartIsDrawHighlightArrowEnabled(renderer: BarChartRenderer) -> Bool
     {
         return drawHighlightArrowEnabled
+    }
+    
+    public func barChartIsDrawValueHightlightEnabled(renderer: BarChartRenderer) -> Bool {
+        return drawValueHighlightedEnabled
     }
     
     public func barChartIsDrawValueAboveBarEnabled(renderer: BarChartRenderer) -> Bool

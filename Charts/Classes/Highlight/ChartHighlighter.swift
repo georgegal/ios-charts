@@ -43,6 +43,15 @@ internal class ChartHighlighter
             return nil
         }
         
+        if let nearest = _chart?.hightlightClosestEnabled, xValCount = _chart?.data?.xValCount
+            where nearest {
+                if xIndex < 0 {
+                    return ChartHighlight(xIndex: 0, dataSetIndex: dataSetIndex)
+                } else if xIndex >= xValCount {
+                    return ChartHighlight(xIndex: xValCount - 1, dataSetIndex: dataSetIndex)
+                }
+        }
+        
         return ChartHighlight(xIndex: xIndex, dataSetIndex: dataSetIndex)
     }
     

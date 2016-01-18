@@ -64,6 +64,7 @@
     _chartView.legend.enabled = NO;
     [_chartView setScaleEnabled:NO];
     _chartView.disableHighlightToggle = YES;
+    _chartView.hightlightClosestEnabled = YES;
     
     _sliderX.value = 6.0;
     _sliderY.value = 50.0;

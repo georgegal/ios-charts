@@ -36,6 +36,9 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     /// disable unselect action for current selected bar
     public var disableHighlightToggle = false
     
+    /// flag indicating if by taping outside the ChartView, the closest element is hightlighted
+    public var hightlightClosestEnabled = false
+    
     /// the color for the background of the chart-drawing area (everything behind the grid lines).
     public var gridBackgroundColor = UIColor(red: 240/255.0, green: 240/255.0, blue: 240/255.0, alpha: 1.0)
     

@@ -607,7 +607,8 @@ public class PieRadarChartViewBase: ChartViewBase
         _velocitySamples.append(AngularVelocitySample(time: currentTime, angle: angleForPoint(touchLocation.x, y: touchLocation.y)))
         
         // Remove samples older than our sample time - 1 seconds
-        for (var i = 0, count = _velocitySamples.count; i < count - 2; i += 1)
+        var count = _velocitySamples.count
+        for var i in 0 ..< count - 2
         {
             if (currentTime - _velocitySamples[i].time > 1.0)
             {
@@ -634,7 +635,7 @@ public class PieRadarChartViewBase: ChartViewBase
         
         // Look for a sample that's closest to the latest sample, but not the same, so we can deduce the direction
         var beforeLastSample = firstSample
-        for (var i = _velocitySamples.count - 1; i >= 0; i -= 1)
+        for i in _velocitySamples.count.stride(to:0, by: -1)
         {
             beforeLastSample = _velocitySamples[i]
             if (beforeLastSample.angle != lastSample.angle)

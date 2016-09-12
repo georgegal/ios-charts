@@ -73,7 +73,8 @@ public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
         
         CGContextSetLineWidth(context!, dataSet.shadowWidth)
         
-        for (var j = minx, count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx))); j < count; j += 1)
+        let count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx)))
+        for j in minx ..< count
         {
             // get the entry
             let e = entries[j]
@@ -211,7 +212,8 @@ public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
                 let lineHeight = valueFont.lineHeight
                 let yOffset: CGFloat = lineHeight + 5.0
                 
-                for (var j = minx, count = Int(ceil(CGFloat(maxx - minx) * _animator.phaseX + CGFloat(minx))); j < count; j += 1)
+                let count = Int(ceil(CGFloat(maxx - minx) * _animator.phaseX + CGFloat(minx)))
+                for j in minx ..< count
                 {
                     let x = positions[j].x
                     let y = positions[j].y

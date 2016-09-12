@@ -174,8 +174,8 @@ public class PieChartRenderer: ChartDataRendererBase
             }
             
             var entries = dataSet.yVals
-            
-            for (var j = 0, maxEntry = Int(min(ceil(CGFloat(entries.count) * _animator.phaseX), CGFloat(entries.count))); j < maxEntry; j += 1)
+            let maxEntry = Int(min(ceil(CGFloat(entries.count) * _animator.phaseX), CGFloat(entries.count)))
+            for j in 0 ..< maxEntry
             {
                 if (drawXVals && !drawYVals && (j >= data.xValCount || data.xVals[j] == nil))
                 {

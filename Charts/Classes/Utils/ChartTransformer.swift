@@ -184,25 +184,25 @@ public class ChartTransformer: NSObject
     public func pointValuesToPixel(inout pts: [CGPoint])
     {
         let trans = valueToPixelMatrix
-        for (var i = 0, count = pts.count; i < count; i += 1)
+        for i in 0 ..< pts.count
         {
             pts[i] = CGPointApplyAffineTransform(pts[i], trans)
         }
     }
     
-    public func pointValueToPixel( inout point: CGPoint)
+    public func pointValueToPixel(inout point: CGPoint)
     {
         point = CGPointApplyAffineTransform(point, valueToPixelMatrix)
     }
     
     /// Transform a rectangle with all matrices.
-    public func rectValueToPixel( inout r: CGRect)
+    public func rectValueToPixel(inout r: CGRect)
     {
         r = CGRectApplyAffineTransform(r, valueToPixelMatrix)
     }
     
     /// Transform a rectangle with all matrices with potential animation phases.
-    public func rectValueToPixel( inout r: CGRect, phaseY: CGFloat)
+    public func rectValueToPixel(inout r: CGRect, phaseY: CGFloat)
     {
         // multiply the height of the rect with the phase
         var bottom = r.origin.y + r.size.height

@@ -96,7 +96,8 @@ internal class ChartHighlighter
         var vals = [ChartSelectionDetail]()
         var pt = CGPoint()
         
-        for (var i = 0, dataSetCount = _chart?.data?.dataSetCount; i < dataSetCount; i += 1)
+        let dataSetCount = _chart?.data?.dataSetCount
+        for i in 0 ..< dataSetCount!
         {
             let dataSet = _chart!.data!.getDataSetByIndex(i)
             

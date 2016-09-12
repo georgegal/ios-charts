@@ -163,7 +163,8 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
                 CGFloat(cur.xIndex) - curDx, (CGFloat(cur.value) - curDy) * phaseY,
                 CGFloat(cur.xIndex), CGFloat(cur.value) * phaseY)
             
-            for (var j = minx + 1, count = min(size, entries.count - 1); j < count; j += 1)
+            let count = min(size, entries.count - 1)
+            for j in minx + 1 ..< count
             {
                 prevPrev = entries[j == 1 ? 0 : j - 2]
                 prev = entries[j - 1]
@@ -273,7 +274,8 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
                 _lineSegments = [CGPoint](count: 2, repeatedValue: CGPoint())
             }
             
-            for (var j = minx, count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx))); j < count; j += 1)
+            let count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx)))
+            for j in minx ..< count
             {
                 if (count > 1 && j == count - 1)
                 { // Last point, we have already drawn a line to this point
@@ -330,14 +332,17 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
             e1 = entries[minx]
             
             let count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx)))
+            var j = 0
+            let initialXValue = count > 1 ? minx + 1 : minx
             
-            for (var x = count > 1 ? minx + 1 : minx, j = 0; x < count; x += 1)
+            for x in initialXValue ..< count
             {
                 e1 = entries[x == 0 ? 0 : (x - 1)]
                 e2 = entries[x]
-                
-                _lineSegments[j++] = CGPointApplyAffineTransform(CGPoint(x: CGFloat(e1.xIndex), y: CGFloat(e1.value) * phaseY), valueToPixelMatrix)
-                _lineSegments[j++] = CGPointApplyAffineTransform(CGPoint(x: CGFloat(e2.xIndex), y: CGFloat(e2.value) * phaseY), valueToPixelMatrix)
+                j += 1
+                _lineSegments[j] = CGPointApplyAffineTransform(CGPoint(x: CGFloat(e1.xIndex), y: CGFloat(e1.value) * phaseY), valueToPixelMatrix)
+                j += 1
+                _lineSegments[j] = CGPointApplyAffineTransform(CGPoint(x: CGFloat(e2.xIndex), y: CGFloat(e2.value) * phaseY), valueToPixelMatrix)
             }
             
             let size = max((count - minx - 1) * 2, 2)
@@ -393,7 +398,8 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
         CGPathAddLineToPoint(filled, &matrix, CGFloat(entries[from].xIndex), CGFloat(entries[from].value) * phaseY)
         
         // create a new path
-        for (var x = from + 1, count = Int(ceil(CGFloat(to - from) * phaseX + CGFloat(from))); x < count; x += 1)
+        let count = Int(ceil(CGFloat(to - from) * phaseX + CGFloat(from)))
+        for x in from + 1 ..< count
         {
             let e = entries[x]
             CGPathAddLineToPoint(filled, &matrix, CGFloat(e.xIndex), CGFloat(e.value) * phaseY)
@@ -462,8 +468,8 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
                     phaseY: _animator.phaseY,
                     from: minx,
                     to: maxx)
-                
-                for (var j = 0, count = positions.count; j < count; j += 1)
+                let count = positions.count
+                for j in 0 ..< count
                 {
                     if (!viewPortHandler.isInBoundsRight(positions[j].x))
                     {
@@ -501,8 +507,8 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
         var rect = CGRect()
         
         CGContextSaveGState(context!)
-        
-        for (var i = 0, count = dataSets.count; i < count; i += 1)
+        let count = dataSets.count
+        for i in 0 ..< count
         {
             let dataSet = lineData.getDataSetByIndex(i) as! LineChartDataSet!
             
@@ -528,7 +534,9 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
             let minx = max(dataSet.entryIndex(entry: entryFrom, isEqual: true), 0)
             let maxx = min(dataSet.entryIndex(entry: entryTo, isEqual: true) + 1, entries.count)
             
-            for (var j = minx, count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx))); j < count; j += 1)
+            let count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx)))
+            
+            for j in minx ..< count
             {
                 let e = entries[j]
                 pt.x = CGFloat(e.xIndex)

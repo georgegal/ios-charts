@@ -80,7 +80,8 @@ public class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
         
         CGContextSaveGState(context!)
         
-        for (var j = 0, count = Int(min(ceil(CGFloat(entries.count) * _animator.phaseX), CGFloat(entries.count))); j < count; j += 1)
+        let count = Int(min(ceil(CGFloat(entries.count) * _animator.phaseX), CGFloat(entries.count)))
+        for j in 0 ..< count
         {
             let e = entries[j]
             point.x = CGFloat(e.xIndex)
@@ -211,7 +212,8 @@ public class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
                 let shapeSize = dataSet.scatterShapeSize
                 let lineHeight = valueFont.lineHeight
                 
-                for (var j = 0, count = Int(ceil(CGFloat(positions.count) * _animator.phaseX)); j < count; j += 1)
+                let count = Int(ceil(CGFloat(positions.count) * _animator.phaseX))
+                for j in 0 ..< count
                 {
                     if (!viewPortHandler.isInBoundsRight(positions[j].x))
                     {

@@ -35,7 +35,8 @@ public class ChartLegendRenderer: ChartRendererBase
             var colors = [UIColor?]()
             
             // loop for building up the colors and labels used in the legend
-            for (var i = 0, count = data.dataSetCount; i < count; i += 1)
+            let count = data.dataSetCount
+            for i in 0 ..< count
             {
                 let dataSet = data.getDataSetByIndex(i)!
                 
@@ -48,7 +49,8 @@ public class ChartLegendRenderer: ChartRendererBase
                     let bds = dataSet as! BarChartDataSet
                     var sLabels = bds.stackLabels
                     
-                    for (var j = 0; j < clrs.count && j < bds.stackSize; j += 1)
+                    let maxJ = min(clrs.count, bds.stackSize)
+                    for j in 0 ..< maxJ
                     {
                         labels.append(sLabels[j % sLabels.count])
                         colors.append(clrs[j])
@@ -66,7 +68,8 @@ public class ChartLegendRenderer: ChartRendererBase
                     var xVals = data.xVals
                     let pds = dataSet as! PieChartDataSet
                     
-                    for (var j = 0; j < clrs.count && j < entryCount && j < xVals.count; j += 1)
+                    let maxJ = min (clrs.count, entryCount, xVals.count)
+                    for j in 0 ..< maxJ
                     {
                         labels.append(xVals[j])
                         colors.append(clrs[j])
@@ -82,7 +85,8 @@ public class ChartLegendRenderer: ChartRendererBase
                 else
                 { // all others
                     
-                    for (var j = 0; j < clrs.count && j < entryCount; j += 1)
+                    let maxJ = min (clrs.count, entryCount)
+                    for j in 0 ..< maxJ
                     {
                         // if multiple colors are set for a DataSet, group them
                         if (j < clrs.count - 1 && j < entryCount - 1)
@@ -191,7 +195,8 @@ public class ChartLegendRenderer: ChartRendererBase
             
             var lineIndex: Int = 0
             
-            for (var i = 0, count = labels.count; i < count; i += 1)
+            let count = labels.count
+            for i in 0 ..< count
             {
                 if (i < calculatedLabelBreakPoints.count && calculatedLabelBreakPoints[i])
                 {

@@ -161,7 +161,8 @@ public class ChartLegend: ChartComponentBase
         var height = CGFloat(0.0)
         
         var labels = self.labels
-        for (var i = 0, count = labels.count; i < count; i += 1)
+        let count = labels.count
+        for i in 0 ..< count
         {
             if (labels[i] != nil)
             {

@@ -45,8 +45,8 @@ public class HorizontalBarChartRenderer: BarChartRenderer
         var barShadow = CGRect()
         var y: Double
         
-        // do the drawing
-        for (var j = 0, count = Int(ceil(CGFloat(dataSet.entryCount) * _animator.phaseX)); j < count; j += 1)
+        let count = Int(ceil(CGFloat(dataSet.entryCount) * _animator.phaseX))
+        for j in 0 ..< count
         {
             let e = entries[j]
             
@@ -256,7 +256,8 @@ public class HorizontalBarChartRenderer: BarChartRenderer
             var posOffset: CGFloat
             var negOffset: CGFloat
             
-            for (var i = 0, count = barData.dataSetCount; i < count; i += 1)
+            let count = barData.dataSetCount
+            for i in 0 ..< count
             {
                 let dataSet = dataSets[i] as! BarChartDataSet
                 
@@ -286,7 +287,8 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                 // if only single values are drawn (sum)
                 if (!dataSet.isStacked)
                 {
-                    for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j += 1)
+                    let count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX))
+                    for j in 0 ..< count
                     {
                         if (!viewPortHandler.isInBoundsTop(valuePoints[j].y))
                         {
@@ -329,8 +331,8 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                 else
                 {
                     // if each value of a potential stack should be drawn
-                    
-                    for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j += 1)
+                    let count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX))
+                    for j in 0 ..< count
                     {
                         let e = entries[j]
                         

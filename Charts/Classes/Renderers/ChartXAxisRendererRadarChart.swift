@@ -44,7 +44,9 @@ public class ChartXAxisRendererRadarChart: ChartXAxisRenderer
         let center = _chart.centerOffsets
         
         let modulus = _xAxis.axisLabelModulus
-        for var i = 0, count = _xAxis.values.count; i < count; i += modulus
+        let count = _xAxis.values.count
+        
+        for i in 0.stride(to: count, by: modulus)
         {
             let label = _xAxis.values[i]
             

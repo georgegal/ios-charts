@@ -91,8 +91,7 @@ internal class ChartUtils
     internal class func getMinimumDistance(valsAtIndex: [ChartSelectionDetail], val: Double, axis: ChartYAxis.AxisDependency) -> Double
     {
         var distance = DBL_MAX
-        
-        for (var i = 0, count = valsAtIndex.count; i < count; i += 1)
+        for i in 0 ..< valsAtIndex.count
         {
             let sel = valsAtIndex[i]
             
@@ -118,8 +117,9 @@ internal class ChartUtils
         )
     }
     
-    internal class func drawText(context: CGContext?, text: String, var point: CGPoint, align: NSTextAlignment, attributes: [String : AnyObject]?)
+    internal class func drawText(context: CGContext?, text: String, point: CGPoint, align: NSTextAlignment, attributes: [String : AnyObject]?)
     {
+        var point = point
         if (align == .Center)
         {
             point.x -= text.sizeWithAttributes(attributes).width / 2.0
@@ -161,8 +161,9 @@ internal class ChartUtils
     }
     
     /// - returns: an angle between 0.0 < 360.0 (not less than zero, less than 360)
-    internal class func normalizedAngleFromAngle(var angle: CGFloat) -> CGFloat
+    internal class func normalizedAngleFromAngle( angle: CGFloat) -> CGFloat
     {
+        var angle = angle
         while (angle < 0.0)
         {
             angle += 360.0

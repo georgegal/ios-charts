@@ -744,7 +744,7 @@ public class ChartData: NSObject
         {
             let set = _dataSets[i]
             
-            for j in 0 ..< set.entryCount
+            for _ in 0 ..< set.entryCount
             {
                 if (e === set.entryForXIndex(e.xIndex))
                 {

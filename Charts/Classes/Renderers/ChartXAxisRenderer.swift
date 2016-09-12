@@ -143,8 +143,8 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         {
             labelMaxSize.width = _xAxis.wordWrapWidthPercent * valueToPixelMatrix.a
         }
-        
-        for (var i = _minX, maxX = min(_maxX + 1, _xAxis.values.count); i < maxX; i += _xAxis.axisLabelModulus)
+        let maxX = min(_maxX + 1, _xAxis.values.count)
+        for i in _minX.stride(to: maxX, by: _xAxis.axisLabelModulus)
         {
             let label = _xAxis.values[i]
             if (label == nil)
@@ -216,8 +216,7 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         let valueToPixelMatrix = transformer.valueToPixelMatrix
         
         var position = CGPoint(x: 0.0, y: 0.0)
-        
-        for (var i = _minX; i <= _maxX; i += _xAxis.axisLabelModulus)
+        for i in _minX.stride(to: _maxX, by: _xAxis.axisLabelModulus)
         {
             position.x = CGFloat(i)
             position.y = 0.0

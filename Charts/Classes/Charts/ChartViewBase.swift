@@ -456,8 +456,8 @@ public class ChartViewBase: UIView, ChartAnimatorDelegate
         {
             return
         }
-
-        for (var i = 0, count = _indicesToHightlight.count; i < count; i += 1)
+        let count = _indicesToHightlight.count
+        for i in 0 ..< count
         {
             let highlight = _indicesToHightlight[i]
             let xIndex = highlight.xIndex
@@ -714,8 +714,8 @@ public class ChartViewBase: UIView, ChartAnimatorDelegate
     public func getEntriesAtIndex(xIndex: Int) -> [ChartDataEntry]
     {
         var vals = [ChartDataEntry]()
-        
-        for (var i = 0, count = _data.dataSetCount; i < count; i += 1)
+        let count = _data.dataSetCount
+        for i in 0 ..< count
         {
             let set = _data.getDataSetByIndex(i)
             let e = set.entryForXIndex(xIndex)

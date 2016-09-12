@@ -114,9 +114,8 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             let last = ChartUtils.nextUp(floor(Double(yMax) / interval) * interval)
             
             var f: Double
-            var i: Int
             var n = 0
-            for (f = first; f <= last; f += interval)
+            for _ in first.stride(through: last, by: interval)
             {
                 n += 1
             }
@@ -132,8 +131,9 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
                 _yAxis.entries = [Double](count: n, repeatedValue: 0.0)
             }
 
-            for (f = first, i = 0; i < n; f += interval, ++i)
-            {
+            f = first
+            for i in 1 ..< n {
+                f += interval
                 _yAxis.entries[i] = Double(f)
             }
         }
@@ -220,7 +220,8 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             
             CGContextBeginPath(context!)
             
-            for (var j = 0, count = _chart.data!.xValCount; j < count; j += 1)
+            let count = _chart.data!.xValCount
+            for j in 0 ..< count
             {
                 let p = ChartUtils.getPosition(center, dist: r, angle: sliceangle * CGFloat(j) + _chart.rotationAngle)
                 

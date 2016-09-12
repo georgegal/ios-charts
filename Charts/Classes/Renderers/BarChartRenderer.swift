@@ -89,7 +89,8 @@ public class BarChartRenderer: ChartDataRendererBase
         var y: Double
         
         // do the drawing
-        for (var j = 0, count = Int(ceil(CGFloat(dataSet.entryCount) * _animator.phaseX)); j < count; j += 1)
+        let count = Int(ceil(CGFloat(dataSet.entryCount) * _animator.phaseX))
+        for j in 0 ..< count
         {
             let e = entries[j]
             
@@ -307,7 +308,7 @@ public class BarChartRenderer: ChartDataRendererBase
             var posOffset: CGFloat
             var negOffset: CGFloat
             
-            for (var i = 0, count = barData.dataSetCount; i < count; i += 1)
+            for i in 0 ..< barData.dataSetCount
             {
                 let dataSet = dataSets[i] as! BarChartDataSet
                 
@@ -350,7 +351,9 @@ public class BarChartRenderer: ChartDataRendererBase
                     var xPositions: [CGFloat] = []
                     var yPositions: [CGFloat] = []
                     var colors: [UIColor] = []
-                    for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j += 1)
+                    
+                    let count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX))
+                    for j in 0 ..< count
                     {
                         if (!viewPortHandler.isInBoundsRight(valuePoints[j].x))
                         {
@@ -388,7 +391,8 @@ public class BarChartRenderer: ChartDataRendererBase
                     var xPositions: [CGFloat] = []
                     var yPositions: [CGFloat] = []
                     
-                    for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j += 1)
+                    let count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX))
+                    for j in 0 ..< count
                     {
                         let e = entries[j]
                         

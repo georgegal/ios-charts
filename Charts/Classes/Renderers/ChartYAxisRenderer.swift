@@ -121,9 +121,8 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
             let last = ChartUtils.nextUp(floor(Double(yMax) / interval) * interval)
             
             var f: Double
-            var i: Int
             var n = 0
-            for (f = first; f <= last; f += interval)
+            for _ in first.stride (to:last+1, by: interval)
             {
                 n += 1
             }
@@ -138,10 +137,12 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
                 _yAxis.entries.removeRange(n..<_yAxis.entries.count)
             }
             
-            for (f = first, i = 0; i < n; f += interval, ++i)
-            {
+            f = first
+            for i in 1 ..< n {
+                f += interval
                 _yAxis.entries[i] = Double(f)
             }
+            
         }
     }
     }
@@ -294,7 +295,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
         var position = CGPoint(x: 0.0, y: 0.0)
         
         // draw the horizontal grid
-        for (var i = 0, count = _yAxis.entryCount; i < count; i += 1)
+        for i in 0 ..< _yAxis.entryCount
         {
             position.x = 0.0
             position.y = CGFloat(_yAxis.entries[i])

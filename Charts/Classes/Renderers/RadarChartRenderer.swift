@@ -129,7 +129,8 @@ public class RadarChartRenderer: LineScatterCandleRadarChartRenderer
         
         let yoffset = CGFloat(5.0)
         
-        for (var i = 0, count = data.dataSetCount; i < count; i += 1)
+        let count = data.dataSetCount
+        for i in 0 ..< count
         {
             let dataSet = data.getDataSetByIndex(i) as! RadarChartDataSet
             
@@ -186,8 +187,9 @@ public class RadarChartRenderer: LineScatterCandleRadarChartRenderer
         CGContextSetAlpha(context!, _chart.webAlpha)
         
         let xIncrements = 1 + _chart.skipWebLineCount
+        let xValCount = _chart.data!.xValCount
         
-        for var i = 0, xValCount = _chart.data!.xValCount; i < xValCount; i += xIncrements
+        for i in 0.stride(to: xValCount, by: xIncrements)
         {
             let p = ChartUtils.getPosition(center, dist: CGFloat(_chart.yRange) * factor, angle: sliceangle * CGFloat(i) + rotationangle)
             
@@ -208,7 +210,8 @@ public class RadarChartRenderer: LineScatterCandleRadarChartRenderer
         
         for j in 0 ..< labelCount
         {
-            for (var i = 0, xValCount = _chart.data!.xValCount; i < xValCount; i += 1)
+            let xValCount = _chart.data!.xValCount
+            for i in 0 ..< xValCount
             {
                 let r = CGFloat(_chart.yAxis.entries[j] - _chart.chartYMin) * factor
 

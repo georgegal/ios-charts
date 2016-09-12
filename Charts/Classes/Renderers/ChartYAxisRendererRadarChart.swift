@@ -26,12 +26,12 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         _chart = chart
     }
  
-    public override func computeAxis(yMin yMin: Double, yMax: Double)
+    public override func computeAxis(yMin: Double, yMax: Double)
     {
-        computeAxisValues(min: yMin, max: yMax)
+        computeAxisValues(yMin, max: yMax)
     }
     
-    internal override func computeAxisValues(min yMin: Double, max yMax: Double)
+    internal override func computeAxisValues(_ yMin: Double, max yMax: Double)
     {
         let labelCount = _yAxis.labelCount
         let range = abs(yMax - yMin)
@@ -43,7 +43,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         }
         
         let rawInterval = range / Double(labelCount)
-        var interval = ChartUtils.roundToNextSignificant(number: Double(rawInterval))
+        var interval = ChartUtils.roundToNextSignificant(Double(rawInterval))
         let intervalMagnitude = pow(10.0, round(log10(interval)))
         let intervalSigDigit = Int(interval / intervalMagnitude)
         
@@ -72,7 +72,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             
             var v = yMin
             
-            for (var i = 0; i < labelCount; i++)
+            for i in 0 ..< labelCount
             {
                 _yAxis.entries.append(v)
                 v += step
@@ -118,7 +118,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             var n = 0
             for (f = first; f <= last; f += interval)
             {
-                ++n
+                n += 1
             }
             
             if (isnan(_yAxis.customAxisMax))
@@ -149,7 +149,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         _yAxis.axisRange = abs(_yAxis.axisMaximum - _yAxis.axisMinimum)
     }
     
-    public override func renderAxisLabels(context context: CGContext?)
+    public override func renderAxisLabels(context: CGContext?)
     {
         if (!_yAxis.isEnabled || !_yAxis.isDrawLabelsEnabled)
         {
@@ -166,7 +166,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         
         let labelLineHeight = _yAxis.labelFont.lineHeight
         
-        for (var j = 0; j < labelCount; j++)
+        for j in 0 ..< labelCount
         {
             if (j == labelCount - 1 && _yAxis.isDrawTopYLabelEntryEnabled == false)
             {
@@ -175,15 +175,15 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             
             let r = CGFloat(_yAxis.entries[j] - _yAxis.axisMinimum) * factor
             
-            let p = ChartUtils.getPosition(center: center, dist: r, angle: _chart.rotationAngle)
+            let p = ChartUtils.getPosition(center, dist: r, angle: _chart.rotationAngle)
             
             let label = _yAxis.getFormattedLabel(j)
             
-            ChartUtils.drawText(context: context, text: label, point: CGPoint(x: p.x + 10.0, y: p.y - labelLineHeight), align: .Left, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor])
+            ChartUtils.drawText(context, text: label, point: CGPoint(x: p.x + 10.0, y: p.y - labelLineHeight), align: .Left, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor])
         }
     }
     
-    public override func renderLimitLines(context context: CGContext?)
+    public override func renderLimitLines(context: CGContext?)
     {
         var limitLines = _yAxis.limitLines
         
@@ -192,7 +192,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             return
         }
         
-        CGContextSaveGState(context)
+        CGContextSaveGState(context!)
         
         let sliceangle = _chart.sliceAngle
         
@@ -201,44 +201,44 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         
         let center = _chart.centerOffsets
         
-        for (var i = 0; i < limitLines.count; i++)
+        for i in 0 ..< limitLines.count
         {
             let l = limitLines[i]
             
-            CGContextSetStrokeColorWithColor(context, l.lineColor.CGColor)
-            CGContextSetLineWidth(context, l.lineWidth)
+            CGContextSetStrokeColorWithColor(context!, l.lineColor.CGColor)
+            CGContextSetLineWidth(context!, l.lineWidth)
             if (l.lineDashLengths != nil)
             {
-                CGContextSetLineDash(context, l.lineDashPhase, l.lineDashLengths!, l.lineDashLengths!.count)
+                CGContextSetLineDash(context!, l.lineDashPhase, l.lineDashLengths!, l.lineDashLengths!.count)
             }
             else
             {
-                CGContextSetLineDash(context, 0.0, nil, 0)
+                CGContextSetLineDash(context!, 0.0, nil, 0)
             }
             
             let r = CGFloat(l.limit - _chart.chartYMin) * factor
             
-            CGContextBeginPath(context)
+            CGContextBeginPath(context!)
             
-            for (var j = 0, count = _chart.data!.xValCount; j < count; j++)
+            for (var j = 0, count = _chart.data!.xValCount; j < count; j += 1)
             {
-                let p = ChartUtils.getPosition(center: center, dist: r, angle: sliceangle * CGFloat(j) + _chart.rotationAngle)
+                let p = ChartUtils.getPosition(center, dist: r, angle: sliceangle * CGFloat(j) + _chart.rotationAngle)
                 
                 if (j == 0)
                 {
-                    CGContextMoveToPoint(context, p.x, p.y)
+                    CGContextMoveToPoint(context!, p.x, p.y)
                 }
                 else
                 {
-                    CGContextAddLineToPoint(context, p.x, p.y)
+                    CGContextAddLineToPoint(context!, p.x, p.y)
                 }
             }
             
-            CGContextClosePath(context)
+            CGContextClosePath(context!)
             
-            CGContextStrokePath(context)
+            CGContextStrokePath(context!)
         }
         
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context!)
     }
 }

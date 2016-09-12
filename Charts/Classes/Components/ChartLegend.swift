@@ -125,7 +125,7 @@ public class ChartLegend: ChartComponentBase
         var maxH = CGFloat(0.0)
         
         var labels = self.labels
-        for (var i = 0; i < labels.count; i++)
+        for i in 0 ..< labels.count
         {
             if (labels[i] == nil)
             {
@@ -161,7 +161,7 @@ public class ChartLegend: ChartComponentBase
         var height = CGFloat(0.0)
         
         var labels = self.labels
-        for (var i = 0, count = labels.count; i < count; i++)
+        for (var i = 0, count = labels.count; i < count; i += 1)
         {
             if (labels[i] != nil)
             {
@@ -220,7 +220,7 @@ public class ChartLegend: ChartComponentBase
     /// **default**: 0.95 (95%)
     public var maxSizePercent: CGFloat = 0.95
     
-    public func calculateDimensions(labelFont labelFont: UIFont, viewPortHandler: ChartViewPortHandler)
+    public func calculateDimensions(labelFont: UIFont, viewPortHandler: ChartViewPortHandler)
     {
         if (position == .RightOfChart
             || position == .RightOfChartCenter
@@ -277,7 +277,7 @@ public class ChartLegend: ChartComponentBase
             var requiredWidth: CGFloat = 0.0
             var stackedStartIndex: Int = -1
             
-            for (var i = 0; i < labelCount; i++)
+            for i in 0 ..< labelCount
             {
                 let drawingForm = colors[i] != nil
                 
@@ -371,7 +371,7 @@ public class ChartLegend: ChartComponentBase
     
     /// colors and labels that will be appended to the end of the auto calculated colors and labels after calculating the legend.
     /// (if the legend has already been calculated, you will need to call notifyDataSetChanged() to let the changes take effect)
-    public func setExtra(colors colors: [UIColor?], labels: [String?])
+    public func setExtra(colors: [UIColor?], labels: [String?])
     {
         self._extraLabels = labels
         self._extraColors = colors
@@ -384,7 +384,7 @@ public class ChartLegend: ChartComponentBase
     /// * A nil color will avoid drawing a form, and a clearColor will leave a space for the form.
     /// This will disable the feature that automatically calculates the legend labels and colors from the datasets.
     /// Call `resetCustom(...)` to re-enable automatic calculation (and then `notifyDataSetChanged()` is needed).
-    public func setCustom(colors colors: [UIColor?], labels: [String?])
+    public func setCustom(colors: [UIColor?], labels: [String?])
     {
         self.labels = labels
         self.colors = colors
@@ -430,7 +430,7 @@ public class ChartLegend: ChartComponentBase
     
     /// colors and labels that will be appended to the end of the auto calculated colors and labels after calculating the legend.
     /// (if the legend has already been calculated, you will need to call `notifyDataSetChanged()` to let the changes take effect)
-    public func setExtra(colors colors: [NSObject], labels: [NSObject])
+    public func setExtra(colors: [NSObject], labels: [NSObject])
     {
         if (colors.count != labels.count)
         {
@@ -448,7 +448,7 @@ public class ChartLegend: ChartComponentBase
     /// * A nil color will avoid drawing a form, and a clearColor will leave a space for the form.
     /// This will disable the feature that automatically calculates the legend labels and colors from the datasets.
     /// Call `resetLegendToAuto(...)` to re-enable automatic calculation, and then if needed - call `notifyDataSetChanged()` on the chart to make it refresh the data.
-    public func setCustom(colors colors: [NSObject], labels: [NSObject])
+    public func setCustom(colors: [NSObject], labels: [NSObject])
     {
         if (colors.count != labels.count)
         {

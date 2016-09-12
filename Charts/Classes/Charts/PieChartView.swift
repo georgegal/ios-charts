@@ -54,22 +54,22 @@ public class PieChartView: PieRadarChartViewBase
         
         let context = UIGraphicsGetCurrentContext()
         
-        renderer!.drawData(context: context)
+        renderer!.drawData(context)
         
         if (valuesToHighlight())
         {
-            renderer!.drawHighlighted(context: context, indices: _indicesToHightlight)
+            renderer!.drawHighlighted(context, indices: _indicesToHightlight)
         }
         
-        renderer!.drawExtras(context: context)
+        renderer!.drawExtras(context)
         
-        renderer!.drawValues(context: context)
+        renderer!.drawValues(context)
         
-        _legendRenderer.renderLegend(context: context)
+        _legendRenderer.renderLegend(context)
         
-        drawDescription(context: context)
+        drawDescription(context)
         
-        drawMarkers(context: context)
+        drawMarkers(context)
     }
     
     internal override func calculateOffsets()
@@ -106,7 +106,7 @@ public class PieChartView: PieRadarChartViewBase
         calcAngles()
     }
     
-    public override func getMarkerPosition(entry e: ChartDataEntry, highlight: ChartHighlight) -> CGPoint
+    public override func getMarkerPosition(_ e: ChartDataEntry, highlight: ChartHighlight) -> CGPoint
     {
         let center = self.centerCircleBox
         var r = self.radius
@@ -147,12 +147,12 @@ public class PieChartView: PieRadarChartViewBase
 
         var cnt = 0
 
-        for (var i = 0; i < _data.dataSetCount; i++)
+        for i in 0 ..< _data.dataSetCount
         {
             let set = dataSets[i]
             var entries = set.yVals
 
-            for (var j = 0; j < entries.count; j++)
+            for j in 0 ..< entries.count
             {
                 _drawAngles.append(calcAngle(abs(entries[j].value)))
 
@@ -165,13 +165,13 @@ public class PieChartView: PieRadarChartViewBase
                     _absoluteAngles.append(_absoluteAngles[cnt - 1] + _drawAngles[cnt])
                 }
 
-                cnt++
+                cnt += 1
             }
         }
     }
     
     /// checks if the given index in the given DataSet is set for highlighting or not
-    public func needsHighlight(xIndex xIndex: Int, dataSetIndex: Int) -> Bool
+    public func needsHighlight(xIndex: Int, dataSetIndex: Int) -> Bool
     {
         // no highlight
         if (!valuesToHighlight() || dataSetIndex < 0)
@@ -179,7 +179,7 @@ public class PieChartView: PieRadarChartViewBase
             return false
         }
         
-        for (var i = 0; i < _indicesToHightlight.count; i++)
+        for i in 0 ..< _indicesToHightlight.count
         {
             // check if the xvalue for the given dataset needs highlight
             if (_indicesToHightlight[i].xIndex == xIndex
@@ -202,7 +202,7 @@ public class PieChartView: PieRadarChartViewBase
     {
         // take the current angle of the chart into consideration
         let a = ChartUtils.normalizedAngleFromAngle(angle - self.rotationAngle)
-        for (var i = 0; i < _absoluteAngles.count; i++)
+        for i in 0 ..< _absoluteAngles.count
         {
             if (_absoluteAngles[i] > a)
             {
@@ -218,7 +218,7 @@ public class PieChartView: PieRadarChartViewBase
     {
         var dataSets = _data.dataSets
         
-        for (var i = 0; i < dataSets.count; i++)
+        for i in 0 ..< dataSets.count
         {
             if (dataSets[i].entryForXIndex(xIndex) !== nil)
             {

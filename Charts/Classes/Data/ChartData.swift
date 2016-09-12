@@ -90,7 +90,7 @@ public class ChartData: NSObject
     {
         checkIsLegal(dataSets)
         
-        calcMinMax(start: _lastStart, end: _lastEnd)
+        calcMinMax(_lastStart, end: _lastEnd)
         calcYValueSum()
         calcYValueCount()
         
@@ -108,7 +108,7 @@ public class ChartData: NSObject
         
         var sum = 1
         
-        for (var i = 0; i < _xVals.count; i++)
+        for i in 0 ..< _xVals.count
         {
             sum += _xVals[i] == nil ? 0 : (_xVals[i]!).characters.count
         }
@@ -130,7 +130,7 @@ public class ChartData: NSObject
             return
         }
         
-        for (var i = 0; i < dataSets.count; i++)
+        for i in 0 ..< dataSets.count
         {
             if (dataSets[i].yVals.count > _xVals.count)
             {
@@ -146,7 +146,7 @@ public class ChartData: NSObject
     }
     
     /// calc minimum and maximum y value over all datasets
-    internal func calcMinMax(start start: Int, end: Int)
+    internal func calcMinMax(start: Int, end: Int)
     {
         
         if (_dataSets == nil || _dataSets.count < 1)
@@ -162,9 +162,9 @@ public class ChartData: NSObject
             _yMin = DBL_MAX
             _yMax = -DBL_MAX
             
-            for (var i = 0; i < _dataSets.count; i++)
+            for i in 0 ..< _dataSets.count
             {
-                _dataSets[i].calcMinMax(start: start, end: end)
+                _dataSets[i].calcMinMax(start, end: end)
                 
                 if (_dataSets[i].yMin < _yMin)
                 {
@@ -248,7 +248,7 @@ public class ChartData: NSObject
             return
         }
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             _yValueSum += fabs(_dataSets[i].yValueSum)
         }
@@ -266,7 +266,7 @@ public class ChartData: NSObject
         
         var count = 0
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             count += _dataSets[i].entryCount
         }
@@ -397,7 +397,7 @@ public class ChartData: NSObject
     {
         if (ignorecase)
         {
-            for (var i = 0; i < dataSets.count; i++)
+            for i in 0 ..< dataSets.count
             {
                 if (dataSets[i].label == nil)
                 {
@@ -411,7 +411,7 @@ public class ChartData: NSObject
         }
         else
         {
-            for (var i = 0; i < dataSets.count; i++)
+            for i in 0 ..< dataSets.count
             {
                 if (label == dataSets[i].label)
                 {
@@ -434,7 +434,7 @@ public class ChartData: NSObject
     {
         var types = [String]()
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             if (dataSets[i].label == nil)
             {
@@ -584,7 +584,7 @@ public class ChartData: NSObject
             return false
         }
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             if (_dataSets[i] === dataSet)
             {
@@ -610,7 +610,7 @@ public class ChartData: NSObject
         _yValCount -= d.entryCount
         _yValueSum -= d.yValueSum
         
-        calcMinMax(start: _lastStart, end: _lastEnd)
+        calcMinMax(_lastStart, end: _lastEnd)
         
         return true
     }
@@ -697,7 +697,7 @@ public class ChartData: NSObject
         }
         
         // remove the entry from the dataset
-        let removed = _dataSets[dataSetIndex].removeEntry(xIndex: entry.xIndex)
+        let removed = _dataSets[dataSetIndex].removeEntry(index: entry.xIndex)
         
         if (removed)
         {
@@ -706,7 +706,7 @@ public class ChartData: NSObject
             _yValCount -= 1
             _yValueSum -= val
             
-            calcMinMax(start: _lastStart, end: _lastEnd)
+            calcMinMax(_lastStart, end: _lastEnd)
         }
         
         return removed
@@ -740,11 +740,11 @@ public class ChartData: NSObject
             return nil
         }
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             let set = _dataSets[i]
             
-            for (var j = 0; j < set.entryCount; j++)
+            for j in 0 ..< set.entryCount
             {
                 if (e === set.entryForXIndex(e.xIndex))
                 {
@@ -759,7 +759,7 @@ public class ChartData: NSObject
     /// - returns: the index of the provided DataSet inside the DataSets array of this data object. -1 if the DataSet was not found.
     public func indexOfDataSet(dataSet: ChartDataSet) -> Int
     {
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             if (_dataSets[i] === dataSet)
             {
@@ -808,14 +808,14 @@ public class ChartData: NSObject
         
         var clrcnt = 0
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             clrcnt += _dataSets[i].colors.count
         }
         
         var colors = [UIColor]()
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             let clrs = _dataSets[i].colors
             
@@ -833,7 +833,7 @@ public class ChartData: NSObject
     {
         var xvals = [String]()
         
-        for (var i = from; i < to; i++)
+        for i in from ..< to
         {
             xvals.append(String(i))
         }
@@ -914,7 +914,7 @@ public class ChartData: NSObject
     
     /// Checks if this data object contains the specified Entry. 
     /// - returns: true if so, false if not.
-    public func contains(entry entry: ChartDataEntry) -> Bool
+    public func contains(entry: ChartDataEntry) -> Bool
     {
         for set in dataSets
         {

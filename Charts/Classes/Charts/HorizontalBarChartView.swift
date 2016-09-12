@@ -124,8 +124,8 @@ public class HorizontalBarChartView: BarChartView
     
     internal override func prepareValuePxMatrix()
     {
-        _rightAxisTransformer.prepareMatrixValuePx(chartXMin: _rightAxis.axisMinimum, deltaX: CGFloat(_rightAxis.axisRange), deltaY: _deltaX, chartYMin: _chartXMin)
-        _leftAxisTransformer.prepareMatrixValuePx(chartXMin: _leftAxis.axisMinimum, deltaX: CGFloat(_leftAxis.axisRange), deltaY: _deltaX, chartYMin: _chartXMin)
+        _rightAxisTransformer.prepareMatrixValuePx(_rightAxis.axisMinimum, deltaX: CGFloat(_rightAxis.axisRange), deltaY: _deltaX, chartYMin: _chartXMin)
+        _leftAxisTransformer.prepareMatrixValuePx(_leftAxis.axisMinimum, deltaX: CGFloat(_leftAxis.axisRange), deltaY: _deltaX, chartYMin: _chartXMin)
     }
 
     internal override func calcModulus()
@@ -181,7 +181,7 @@ public class HorizontalBarChartView: BarChartView
             return nil
         }
         
-        return _highlighter?.getHighlight(x: Double(pt.y), y: Double(pt.x))
+        return _highlighter?.getHighlight(Double(pt.y), y: Double(pt.x))
     }
     
     public override var lowestVisibleXIndex: Int

@@ -31,7 +31,7 @@ public class ChartTransformer: NSObject
     }
 
     /// Prepares the matrix that transforms values to pixels. Calculates the scale factors from the charts size and offsets.
-    public func prepareMatrixValuePx(chartXMin chartXMin: Double, deltaX: CGFloat, deltaY: CGFloat, chartYMin: Double)
+    public func prepareMatrixValuePx(chartXMin: Double, deltaX: CGFloat, deltaY: CGFloat, chartYMin: Double)
     {
         let scaleX = (_viewPortHandler.contentWidth / deltaX)
         let scaleY = (_viewPortHandler.contentHeight / deltaY)
@@ -62,7 +62,7 @@ public class ChartTransformer: NSObject
         var valuePoints = [CGPoint]()
         valuePoints.reserveCapacity(entries.count)
 
-        for (var j = 0; j < entries.count; j++)
+        for j in 0 ..< entries.count
         {
             let e = entries[j]
             valuePoints.append(CGPoint(x: CGFloat(e.xIndex), y: CGFloat(e.value) * phaseY))
@@ -81,7 +81,7 @@ public class ChartTransformer: NSObject
         var valuePoints = [CGPoint]()
         valuePoints.reserveCapacity(count)
         
-        for (var j = 0; j < count; j++)
+        for j in 0 ..< count
         {
             let e = entries[j + from]
             valuePoints.append(CGPoint(x: CGFloat(e.xIndex - from) * phaseX + CGFloat(from), y: CGFloat(e.value) * phaseY))
@@ -100,7 +100,7 @@ public class ChartTransformer: NSObject
         var valuePoints = [CGPoint]()
         valuePoints.reserveCapacity(count)
 
-        for (var j = 0; j < count; j++)
+        for j in 0 ..< count
         {
             let e = entries[j + from]
             valuePoints.append(CGPoint(x: CGFloat(e.xIndex), y: CGFloat(e.value) * phaseY))
@@ -117,7 +117,7 @@ public class ChartTransformer: NSObject
         var valuePoints = [CGPoint]()
         valuePoints.reserveCapacity(entries.count)
         
-        for (var j = 0; j < entries.count; j++)
+        for j in 0 ..< entries.count
         {
             let e = entries[j]
             valuePoints.append(CGPoint(x: CGFloat(e.xIndex), y: CGFloat(e.high) * phaseY))
@@ -137,7 +137,7 @@ public class ChartTransformer: NSObject
         let setCount = barData.dataSetCount
         let space = barData.groupSpace
 
-        for (var j = 0; j < entries.count; j++)
+        for j in 0 ..< entries.count
         {
             let e = entries[j]
 
@@ -162,7 +162,7 @@ public class ChartTransformer: NSObject
         let setCount = barData.dataSetCount
         let space = barData.groupSpace
         
-        for (var j = 0; j < entries.count; j++)
+        for j in 0 ..< entries.count
         {
             let e = entries[j]
             let i = e.xIndex
@@ -184,25 +184,25 @@ public class ChartTransformer: NSObject
     public func pointValuesToPixel(inout pts: [CGPoint])
     {
         let trans = valueToPixelMatrix
-        for (var i = 0, count = pts.count; i < count; i++)
+        for (var i = 0, count = pts.count; i < count; i += 1)
         {
             pts[i] = CGPointApplyAffineTransform(pts[i], trans)
         }
     }
     
-    public func pointValueToPixel(inout point: CGPoint)
+    public func pointValueToPixel( inout point: CGPoint)
     {
         point = CGPointApplyAffineTransform(point, valueToPixelMatrix)
     }
     
     /// Transform a rectangle with all matrices.
-    public func rectValueToPixel(inout r: CGRect)
+    public func rectValueToPixel( inout r: CGRect)
     {
         r = CGRectApplyAffineTransform(r, valueToPixelMatrix)
     }
     
     /// Transform a rectangle with all matrices with potential animation phases.
-    public func rectValueToPixel(inout r: CGRect, phaseY: CGFloat)
+    public func rectValueToPixel( inout r: CGRect, phaseY: CGFloat)
     {
         // multiply the height of the rect with the phase
         var bottom = r.origin.y + r.size.height
@@ -215,13 +215,13 @@ public class ChartTransformer: NSObject
     }
     
     /// Transform a rectangle with all matrices.
-    public func rectValueToPixelHorizontal(inout r: CGRect)
+    public func rectValueToPixelHorizontal( inout r: CGRect)
     {
         r = CGRectApplyAffineTransform(r, valueToPixelMatrix)
     }
     
     /// Transform a rectangle with all matrices with potential animation phases.
-    public func rectValueToPixelHorizontal(inout r: CGRect, phaseY: CGFloat)
+    public func rectValueToPixelHorizontal( inout r: CGRect, phaseY: CGFloat)
     {
         // multiply the height of the rect with the phase
         var right = r.origin.x + r.size.width
@@ -234,29 +234,29 @@ public class ChartTransformer: NSObject
     }
 
     /// transforms multiple rects with all matrices
-    public func rectValuesToPixel(inout rects: [CGRect])
+    public func rectValuesToPixel( inout rects: [CGRect])
     {
         let trans = valueToPixelMatrix
         
-        for (var i = 0; i < rects.count; i++)
+        for i in 0 ..< rects.count
         {
             rects[i] = CGRectApplyAffineTransform(rects[i], trans)
         }
     }
     
     /// Transforms the given array of touch points (pixels) into values on the chart.
-    public func pixelsToValue(inout pixels: [CGPoint])
+    public func pixelsToValue( inout pixels: [CGPoint])
     {
         let trans = pixelToValueMatrix
         
-        for (var i = 0; i < pixels.count; i++)
+        for i in 0 ..< pixels.count
         {
             pixels[i] = CGPointApplyAffineTransform(pixels[i], trans)
         }
     }
     
     /// Transforms the given touch point (pixels) into a value on the chart.
-    public func pixelToValue(inout pixel: CGPoint)
+    public func pixelToValue( inout pixel: CGPoint)
     {
         pixel = CGPointApplyAffineTransform(pixel, pixelToValueMatrix)
     }

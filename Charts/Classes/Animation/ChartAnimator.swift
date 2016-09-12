@@ -97,7 +97,7 @@ public class ChartAnimator: NSObject
            
             if (_easingX != nil)
             {
-                phaseX = _easingX!(elapsed: elapsed, duration: duration)
+                phaseX = _easingX!(elapsed, duration)
             }
             else
             {
@@ -115,7 +115,7 @@ public class ChartAnimator: NSObject
             
             if (_easingY != nil)
             {
-                phaseY = _easingY!(elapsed: elapsed, duration: duration)
+                phaseY = _easingY!(elapsed, duration)
             }
             else
             {
@@ -155,7 +155,7 @@ public class ChartAnimator: NSObject
     {
         stop()
         
-        _displayLink = CADisplayLink(target: self, selector: Selector("animationLoop"))
+        _displayLink = CADisplayLink(target: self, selector: #selector(ChartAnimator.animationLoop))
         
         _startTime = CACurrentMediaTime()
         _xDuration = xAxisDuration

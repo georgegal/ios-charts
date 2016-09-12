@@ -72,7 +72,7 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
             return nil
         }
         
-        return _highlighter?.getHighlight(x: Double(pt.x), y: Double(pt.y))
+        return _highlighter?.getHighlight(Double(pt.x), y: Double(pt.y))
     }
         
     /// - returns: the bounding box of the specified Entry in the specified DataSet. Returns null if the Entry could not be found in the charts data.
@@ -133,7 +133,7 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
         super.drawRect(rect)
         if(valuesToHighlight() && _drawValueHighlightedEnabled) {
             let context = UIGraphicsGetCurrentContext()
-            renderer!.drawValues(context: context, indices: _indicesToHightlight);
+            renderer!.drawValues(context, indices: _indicesToHightlight);
         }
     }
     

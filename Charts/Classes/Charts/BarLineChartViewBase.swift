@@ -114,10 +114,10 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         
         _highlighter = ChartHighlighter(chart: self)
         
-        _tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapGestureRecognized:"))
-        _doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("doubleTapGestureRecognized:"))
+        _tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(BarLineChartViewBase.tapGestureRecognized(_:)))
+        _doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(BarLineChartViewBase.doubleTapGestureRecognized(_:)))
         _doubleTapGestureRecognizer.numberOfTapsRequired = 2
-        _panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("panGestureRecognized:"))
+        _panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(BarLineChartViewBase.panGestureRecognized(_:)))
         
         _panGestureRecognizer.delegate = self
         
@@ -129,7 +129,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         _panGestureRecognizer.enabled = _dragEnabled
 
         #if !os(tvOS)
-            _pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: Selector("pinchGestureRecognized:"))
+            _pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(BarLineChartViewBase.pinchGestureRecognized(_:)))
             _pinchGestureRecognizer.delegate = self
             self.addGestureRecognizer(_pinchGestureRecognizer)
             _pinchGestureRecognizer.enabled = _pinchZoomEnabled || _scaleXEnabled || _scaleYEnabled
@@ -151,28 +151,28 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         
         if (_xAxisRenderer !== nil)
         {
-            _xAxisRenderer!.calcXBounds(chart: self, xAxisModulus: _xAxis.axisLabelModulus)
+            _xAxisRenderer!.calcXBounds(self, xAxisModulus: _xAxis.axisLabelModulus)
         }
         if (renderer !== nil)
         {
-            renderer!.calcXBounds(chart: self, xAxisModulus: _xAxis.axisLabelModulus)
+            renderer!.calcXBounds(self, xAxisModulus: _xAxis.axisLabelModulus)
         }
 
         // execute all drawing commands
-        drawGridBackground(context: context)
+        drawGridBackground(context)
         
         if (_leftAxis.isEnabled)
         {
-            _leftYAxisRenderer?.computeAxis(yMin: _leftAxis.axisMinimum, yMax: _leftAxis.axisMaximum)
+            _leftYAxisRenderer?.computeAxis(_leftAxis.axisMinimum, yMax: _leftAxis.axisMaximum)
         }
         if (_rightAxis.isEnabled)
         {
-            _rightYAxisRenderer?.computeAxis(yMin: _rightAxis.axisMinimum, yMax: _rightAxis.axisMaximum)
+            _rightYAxisRenderer?.computeAxis(_rightAxis.axisMinimum, yMax: _rightAxis.axisMaximum)
         }
         
-        _xAxisRenderer?.renderAxisLine(context: context)
-        _leftYAxisRenderer?.renderAxisLine(context: context)
-        _rightYAxisRenderer?.renderAxisLine(context: context)
+        _xAxisRenderer?.renderAxisLine(context)
+        _leftYAxisRenderer?.renderAxisLine(context)
+        _rightYAxisRenderer?.renderAxisLine(context)
 
         if (_autoScaleMinMaxEnabled)
         {
@@ -191,71 +191,71 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         }
         
         // make sure the graph values and grid cannot be drawn outside the content-rect
-        CGContextSaveGState(context)
+        CGContextSaveGState(context!)
 
-        CGContextClipToRect(context, _viewPortHandler.contentRect)
+        CGContextClipToRect(context!, _viewPortHandler.contentRect)
         
         if (_xAxis.isDrawLimitLinesBehindDataEnabled)
         {
-            _xAxisRenderer?.renderLimitLines(context: context)
+            _xAxisRenderer?.renderLimitLines(context)
         }
         if (_leftAxis.isDrawLimitLinesBehindDataEnabled)
         {
-            _leftYAxisRenderer?.renderLimitLines(context: context)
+            _leftYAxisRenderer?.renderLimitLines(context)
         }
         if (_rightAxis.isDrawLimitLinesBehindDataEnabled)
         {
-            _rightYAxisRenderer?.renderLimitLines(context: context)
+            _rightYAxisRenderer?.renderLimitLines(context)
         }
         
-        _xAxisRenderer?.renderGridLines(context: context)
-        _leftYAxisRenderer?.renderGridLines(context: context)
-        _rightYAxisRenderer?.renderGridLines(context: context)
+        _xAxisRenderer?.renderGridLines(context)
+        _leftYAxisRenderer?.renderGridLines(context)
+        _rightYAxisRenderer?.renderGridLines(context)
         
-        renderer?.drawData(context: context)
+        renderer?.drawData(context)
         
         if (!_xAxis.isDrawLimitLinesBehindDataEnabled)
         {
-            _xAxisRenderer?.renderLimitLines(context: context)
+            _xAxisRenderer?.renderLimitLines(context)
         }
         if (!_leftAxis.isDrawLimitLinesBehindDataEnabled)
         {
-            _leftYAxisRenderer?.renderLimitLines(context: context)
+            _leftYAxisRenderer?.renderLimitLines(context)
         }
         if (!_rightAxis.isDrawLimitLinesBehindDataEnabled)
         {
-            _rightYAxisRenderer?.renderLimitLines(context: context)
+            _rightYAxisRenderer?.renderLimitLines(context)
         }
 
         // if highlighting is enabled
         if (valuesToHighlight())
         {
-            renderer?.drawHighlighted(context: context, indices: _indicesToHightlight)
+            renderer?.drawHighlighted(context, indices: _indicesToHightlight)
         }
 
         // Removes clipping rectangle
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context!)
         
-        renderer!.drawExtras(context: context)
+        renderer!.drawExtras(context)
         
-        _xAxisRenderer.renderAxisLabels(context: context)
-        _leftYAxisRenderer.renderAxisLabels(context: context)
-        _rightYAxisRenderer.renderAxisLabels(context: context)
+        _xAxisRenderer.renderAxisLabels(context)
+        _leftYAxisRenderer.renderAxisLabels(context)
+        _rightYAxisRenderer.renderAxisLabels(context)
 
-        renderer!.drawValues(context: context)
+        renderer!.drawValues(context)
 
-        _legendRenderer.renderLegend(context: context)
+        _legendRenderer.renderLegend(context)
         // drawLegend()
 
-        drawMarkers(context: context)
+        drawMarkers(context)
 
-        drawDescription(context: context)
+        drawDescription(context)
     }
     
     internal func prepareValuePxMatrix()
     {
-        _rightAxisTransformer.prepareMatrixValuePx(chartXMin: _chartXMin, deltaX: _deltaX, deltaY: CGFloat(_rightAxis.axisRange), chartYMin: _rightAxis.axisMinimum)
-        _leftAxisTransformer.prepareMatrixValuePx(chartXMin: _chartXMin, deltaX: _deltaX, deltaY: CGFloat(_leftAxis.axisRange), chartYMin: _leftAxis.axisMinimum)
+        _rightAxisTransformer.prepareMatrixValuePx(_chartXMin, deltaX: _deltaX, deltaY: CGFloat(_rightAxis.axisRange), chartYMin: _rightAxis.axisMinimum)
+        _leftAxisTransformer.prepareMatrixValuePx(_chartXMin, deltaX: _deltaX, deltaY: CGFloat(_leftAxis.axisRange), chartYMin: _leftAxis.axisMinimum)
     }
     
     internal func prepareOffsetMatrix()
@@ -276,10 +276,10 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         _leftAxis?._defaultValueFormatter = _defaultValueFormatter
         _rightAxis?._defaultValueFormatter = _defaultValueFormatter
         
-        _leftYAxisRenderer?.computeAxis(yMin: _leftAxis.axisMinimum, yMax: _leftAxis.axisMaximum)
-        _rightYAxisRenderer?.computeAxis(yMin: _rightAxis.axisMinimum, yMax: _rightAxis.axisMaximum)
+        _leftYAxisRenderer?.computeAxis(_leftAxis.axisMinimum, yMax: _leftAxis.axisMaximum)
+        _rightYAxisRenderer?.computeAxis(_rightAxis.axisMinimum, yMax: _rightAxis.axisMaximum)
         
-        _xAxisRenderer?.computeAxis(xValAverageLength: _data.xValAverageLength, xValues: _data.xVals)
+        _xAxisRenderer?.computeAxis(_data.xValAverageLength, xValues: _data.xVals)
         
         if (_legend !== nil)
         {
@@ -295,7 +295,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     {
         if (_autoScaleMinMaxEnabled)
         {
-            _data.calcMinMax(start: lowestVisibleXIndex, end: highestVisibleXIndex)
+            _data.calcMinMax(lowestVisibleXIndex, end: highestVisibleXIndex)
         }
         
         var minLeft = _data.getYMin(.Left)
@@ -507,7 +507,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         }
     }
     
-    public override func getMarkerPosition(entry e: ChartDataEntry, highlight: ChartHighlight) -> CGPoint
+    public override func getMarkerPosition(e: ChartDataEntry, highlight: ChartHighlight) -> CGPoint
     {
         let dataSetIndex = highlight.dataSetIndex
         var xPos = CGFloat(e.xIndex)
@@ -568,30 +568,30 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     }
     
     /// draws the grid background
-    internal func drawGridBackground(context context: CGContext?)
+    internal func drawGridBackground(context: CGContext?)
     {
         if (drawGridBackgroundEnabled || drawBordersEnabled)
         {
-            CGContextSaveGState(context)
+            CGContextSaveGState(context!)
         }
         
         if (drawGridBackgroundEnabled)
         {
             // draw the grid background
-            CGContextSetFillColorWithColor(context, gridBackgroundColor.CGColor)
-            CGContextFillRect(context, _viewPortHandler.contentRect)
+            CGContextSetFillColorWithColor(context!, gridBackgroundColor.CGColor)
+            CGContextFillRect(context!, _viewPortHandler.contentRect)
         }
         
         if (drawBordersEnabled)
         {
-            CGContextSetLineWidth(context, borderLineWidth)
-            CGContextSetStrokeColorWithColor(context, borderColor.CGColor)
-            CGContextStrokeRect(context, _viewPortHandler.contentRect)
+            CGContextSetLineWidth(context!, borderLineWidth)
+            CGContextSetStrokeColorWithColor(context!, borderColor.CGColor)
+            CGContextStrokeRect(context!, _viewPortHandler.contentRect)
         }
         
         if (drawGridBackgroundEnabled || drawBordersEnabled)
         {
-            CGContextRestoreGState(context)
+            CGContextRestoreGState(context!)
         }
     }
     
@@ -646,14 +646,14 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
             if (h === nil || h!.isEqual(self.lastHighlighted))
             {
                 if !disableHighlightToggle {
-                    self.highlightValue(highlight: nil, callDelegate: true)
+                    self.highlightValue(nil, callDelegate: true)
                     self.lastHighlighted = nil
                 }
             }
             else
             {
                 self.lastHighlighted = h
-                self.highlightValue(highlight: h, callDelegate: true)
+                self.highlightValue(h, callDelegate: true)
             }
         }
     }
@@ -790,7 +790,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                 let didUserDrag = (self is HorizontalBarChartView) ? translation.y != 0.0 : translation.x != 0.0 
                 
                 // Check to see if user dragged at all and if so, can the chart be dragged by the given amount
-                if (didUserDrag && !performPanChange(translation: translation))
+                if (didUserDrag && !performPanChange(translation))
                 {
                     if (_outerScrollView !== nil)
                     {
@@ -818,7 +818,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                 let originalTranslation = recognizer.translationInView(self)
                 let translation = CGPoint(x: originalTranslation.x - _lastPanPoint.x, y: originalTranslation.y - _lastPanPoint.y)
                 
-                performPanChange(translation: translation)
+                performPanChange(translation)
                 
                 _lastPanPoint = originalTranslation
             }
@@ -833,7 +833,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                     (h !== nil && lastHighlighted !== nil && !h!.isEqual(lastHighlighted)))
                 {
                     self.lastHighlighted = h
-                    self.highlightValue(highlight: h, callDelegate: true)
+                    self.highlightValue(h, callDelegate: true)
                 }
             }
         }
@@ -848,7 +848,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                     _decelerationLastTime = CACurrentMediaTime()
                     _decelerationVelocity = recognizer.velocityInView(self)
                     
-                    _decelerationDisplayLink = CADisplayLink(target: self, selector: Selector("decelerationLoop"))
+                    _decelerationDisplayLink = CADisplayLink(target: self, selector: #selector(BarLineChartViewBase.decelerationLoop))
                     _decelerationDisplayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
                 }
                 
@@ -863,7 +863,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         }
     }
     
-    private func performPanChange(var translation translation: CGPoint) -> Bool
+    private func performPanChange(var translation: CGPoint) -> Bool
     {
         if (isAnyAxisInverted && _closestDataSetToTouch !== nil
             && getAxis(_closestDataSetToTouch.axisDependency).isInverted)
@@ -917,7 +917,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
             y: _decelerationVelocity.y * timeInterval
         )
         
-        if (!performPanChange(translation: distance))
+        if (!performPanChange(distance))
         {
             // We reached the edge, stop
             _decelerationVelocity.x = 0.0
@@ -1099,7 +1099,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     /// Limits the maximum and minimum value count that can be visible by pinching and zooming.
     /// e.g. minRange=10, maxRange=100 no less than 10 values and no more that 100 values can be viewed
     /// at once without scrolling
-    public func setVisibleXRange(minXRange minXRange: CGFloat, maxXRange: CGFloat)
+    public func setVisibleXRange(minXRange: CGFloat, maxXRange: CGFloat)
     {
         let maxScale = _deltaX / minXRange
         let minScale = _deltaX / maxXRange
@@ -1161,7 +1161,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     /// - parameter xIndex:
     /// - parameter yValue:
     /// - parameter axis: - which axis should be used as a reference for the y-axis
-    public func moveViewTo(xIndex xIndex: Int, yValue: CGFloat, axis: ChartYAxis.AxisDependency)
+    public func moveViewTo(xIndex: Int, yValue: CGFloat, axis: ChartYAxis.AxisDependency)
     {
         if (_viewPortHandler.hasChartDimens)
         {
@@ -1174,7 +1174,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         }
         else
         {
-            _sizeChangeEventActions.append({[weak self] () in self?.moveViewTo(xIndex: xIndex, yValue: yValue, axis: axis); })
+            _sizeChangeEventActions.append({[weak self] () in self?.moveViewTo(xIndex, yValue: yValue, axis: axis); })
         }
     }
     
@@ -1184,7 +1184,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     /// - parameter xIndex:
     /// - parameter yValue:
     /// - parameter axis: - which axis should be used as a reference for the y-axis
-    public func centerViewTo(xIndex xIndex: Int, yValue: CGFloat, axis: ChartYAxis.AxisDependency)
+    public func centerViewTo(xIndex: Int, yValue: CGFloat, axis: ChartYAxis.AxisDependency)
     {
         if (_viewPortHandler.hasChartDimens)
         {
@@ -1198,13 +1198,13 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         }
         else
         {
-            _sizeChangeEventActions.append({[weak self] () in self?.centerViewTo(xIndex: xIndex, yValue: yValue, axis: axis); })
+            _sizeChangeEventActions.append({[weak self] () in self?.centerViewTo(xIndex, yValue: yValue, axis: axis); })
         }
     }
 
     /// Sets custom offsets for the current `ChartViewPort` (the offsets on the sides of the actual chart window). Setting this will prevent the chart from automatically calculating it's offsets. Use `resetViewPortOffsets()` to undo this.
     /// ONLY USE THIS WHEN YOU KNOW WHAT YOU ARE DOING, else use `setExtraOffsets(...)`.
-    public func setViewPortOffsets(left left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat)
+    public func setViewPortOffsets(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat)
     {
         _customViewPortEnabled = true
         
@@ -1217,7 +1217,7 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         else
         {
             dispatch_async(dispatch_get_main_queue(), {
-                self.setViewPortOffsets(left: left, top: top, right: right, bottom: bottom)
+                self.setViewPortOffsets(left, top: top, right: right, bottom: bottom)
             })
         }
     }
@@ -1401,14 +1401,14 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
             return nil
         }
 
-        return _highlighter?.getHighlight(x: Double(pt.x), y: Double(pt.y))
+        return _highlighter?.getHighlight(Double(pt.x), y: Double(pt.y))
     }
 
     /// - returns: the x and y values in the chart at the given touch point
     /// (encapsulated in a `CGPoint`). This method transforms pixel coordinates to
     /// coordinates / values in the chart. This is the opposite method to
     /// `getPixelsForValues(...)`.
-    public func getValueByTouchPoint(var pt pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGPoint
+    public func getValueByTouchPoint(var pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGPoint
     {
         getTransformer(axis).pixelToValue(&pt)
 
@@ -1428,9 +1428,9 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
 
     /// - returns: the y-value at the given touch position (must not necessarily be
     /// a value contained in one of the datasets)
-    public func getYValueByTouchPoint(pt pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGFloat
+    public func getYValueByTouchPoint(pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGFloat
     {
-        return getValueByTouchPoint(pt: pt, axis: axis).y
+        return getValueByTouchPoint(pt, axis: axis).y
     }
     
     /// - returns: the Entry object displayed at the touched position of the chart
@@ -1702,7 +1702,7 @@ internal class BarLineChartFillFormatter: NSObject, ChartFillFormatter
         _chart = chart
     }
     
-    internal func getFillLinePosition(dataSet dataSet: LineChartDataSet, data: LineChartData, chartMaxY: Double, chartMinY: Double) -> CGFloat
+    internal func getFillLinePosition(dataSet: LineChartDataSet, data: LineChartData, chartMaxY: Double, chartMinY: Double) -> CGFloat
     {
         var fillMin = CGFloat(0.0)
         

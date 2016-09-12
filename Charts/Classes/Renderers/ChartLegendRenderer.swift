@@ -35,7 +35,7 @@ public class ChartLegendRenderer: ChartRendererBase
             var colors = [UIColor?]()
             
             // loop for building up the colors and labels used in the legend
-            for (var i = 0, count = data.dataSetCount; i < count; i++)
+            for (var i = 0, count = data.dataSetCount; i < count; i += 1)
             {
                 let dataSet = data.getDataSetByIndex(i)!
                 
@@ -48,7 +48,7 @@ public class ChartLegendRenderer: ChartRendererBase
                     let bds = dataSet as! BarChartDataSet
                     var sLabels = bds.stackLabels
                     
-                    for (var j = 0; j < clrs.count && j < bds.stackSize; j++)
+                    for (var j = 0; j < clrs.count && j < bds.stackSize; j += 1)
                     {
                         labels.append(sLabels[j % sLabels.count])
                         colors.append(clrs[j])
@@ -66,7 +66,7 @@ public class ChartLegendRenderer: ChartRendererBase
                     var xVals = data.xVals
                     let pds = dataSet as! PieChartDataSet
                     
-                    for (var j = 0; j < clrs.count && j < entryCount && j < xVals.count; j++)
+                    for (var j = 0; j < clrs.count && j < entryCount && j < xVals.count; j += 1)
                     {
                         labels.append(xVals[j])
                         colors.append(clrs[j])
@@ -82,7 +82,7 @@ public class ChartLegendRenderer: ChartRendererBase
                 else
                 { // all others
                     
-                    for (var j = 0; j < clrs.count && j < entryCount; j++)
+                    for (var j = 0; j < clrs.count && j < entryCount; j += 1)
                     {
                         // if multiple colors are set for a DataSet, group them
                         if (j < clrs.count - 1 && j < entryCount - 1)
@@ -104,10 +104,10 @@ public class ChartLegendRenderer: ChartRendererBase
         }
         
         // calculate all dimensions of the legend
-        _legend.calculateDimensions(labelFont: _legend.font, viewPortHandler: viewPortHandler)
+        _legend.calculateDimensions(_legend.font, viewPortHandler: viewPortHandler)
     }
     
-    public func renderLegend(context context: CGContext?)
+    public func renderLegend(context: CGContext?)
     {
         if (_legend === nil || !_legend.enabled)
         {
@@ -191,7 +191,7 @@ public class ChartLegendRenderer: ChartRendererBase
             
             var lineIndex: Int = 0
             
-            for (var i = 0, count = labels.count; i < count; i++)
+            for (var i = 0, count = labels.count; i < count; i += 1)
             {
                 if (i < calculatedLabelBreakPoints.count && calculatedLabelBreakPoints[i])
                 {
@@ -202,7 +202,7 @@ public class ChartLegendRenderer: ChartRendererBase
                 if (posX == originPosX && legendPosition == .BelowChartCenter && lineIndex < calculatedLineSizes.count)
                 {
                     posX += (direction == .RightToLeft ? calculatedLineSizes[lineIndex].width : -calculatedLineSizes[lineIndex].width) / 2.0
-                    lineIndex++
+                    lineIndex += 1
                 }
                 
                 let drawingForm = colors[i] != nil
@@ -310,7 +310,7 @@ public class ChartLegendRenderer: ChartRendererBase
                 }
             }
             
-            for (var i = 0; i < labels.count; i++)
+            for i in 0 ..< labels.count
             {
                 let drawingForm = colors[i] != nil
                 var x = posX
@@ -389,38 +389,38 @@ public class ChartLegendRenderer: ChartRendererBase
         
         let formsize = legend.formSize
         
-        CGContextSaveGState(context)
+        CGContextSaveGState(context!)
         
         switch (legend.form)
         {
         case .Circle:
-            CGContextSetFillColorWithColor(context, formColor!.CGColor)
-            CGContextFillEllipseInRect(context, CGRect(x: x, y: y - formsize / 2.0, width: formsize, height: formsize))
+            CGContextSetFillColorWithColor(context!, formColor!.CGColor)
+            CGContextFillEllipseInRect(context!, CGRect(x: x, y: y - formsize / 2.0, width: formsize, height: formsize))
             break
         case .Square:
-            CGContextSetFillColorWithColor(context, formColor!.CGColor)
-            CGContextFillRect(context, CGRect(x: x, y: y - formsize / 2.0, width: formsize, height: formsize))
+            CGContextSetFillColorWithColor(context!, formColor!.CGColor)
+            CGContextFillRect(context!, CGRect(x: x, y: y - formsize / 2.0, width: formsize, height: formsize))
             break
         case .Line:
             
-            CGContextSetLineWidth(context, legend.formLineWidth)
-            CGContextSetStrokeColorWithColor(context, formColor!.CGColor)
+            CGContextSetLineWidth(context!, legend.formLineWidth)
+            CGContextSetStrokeColorWithColor(context!, formColor!.CGColor)
             
             _formLineSegmentsBuffer[0].x = x
             _formLineSegmentsBuffer[0].y = y
             _formLineSegmentsBuffer[1].x = x + formsize
             _formLineSegmentsBuffer[1].y = y
-            CGContextStrokeLineSegments(context, _formLineSegmentsBuffer, 2)
+            CGContextStrokeLineSegments(context!, _formLineSegmentsBuffer, 2)
             
             break
         }
         
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context!)
     }
 
     /// Draws the provided label at the given position.
     internal func drawLabel(context: CGContext?, x: CGFloat, y: CGFloat, label: String, font: UIFont, textColor: UIColor)
     {
-        ChartUtils.drawText(context: context, text: label, point: CGPoint(x: x, y: y), align: .Left, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: textColor])
+        ChartUtils.drawText(context, text: label, point: CGPoint(x: x, y: y), align: .Left, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: textColor])
     }
 }

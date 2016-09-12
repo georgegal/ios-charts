@@ -29,7 +29,7 @@ internal class ChartHighlighter
     /// - parameter x:
     /// - parameter y:
     /// - returns:
-    internal func getHighlight(x x: Double, y: Double) -> ChartHighlight?
+    internal func getHighlight(x: Double, y: Double) -> ChartHighlight?
     {
         let xIndex = getXIndex(x)
         if (xIndex == -Int.max)
@@ -37,13 +37,13 @@ internal class ChartHighlighter
             return nil
         }
         
-        let dataSetIndex = getDataSetIndex(xIndex: xIndex, x: x, y: y)
+        let dataSetIndex = getDataSetIndex(xIndex, x: x, y: y)
         if (dataSetIndex == -Int.max)
         {
             return nil
         }
         
-        if let nearest = _chart?.hightlightClosestEnabled, xValCount = _chart?.data?.xValCount
+        if let nearest = _chart?.hightlightClosestEnabled, let xValCount = _chart?.data?.xValCount
             where nearest {
                 if xIndex < 0 {
                     return ChartHighlight(xIndex: 0, dataSetIndex: dataSetIndex)
@@ -74,7 +74,7 @@ internal class ChartHighlighter
     /// - parameter x:
     /// - parameter y:
     /// - returns:
-    internal func getDataSetIndex(xIndex xIndex: Int, x: Double, y: Double) -> Int
+    internal func getDataSetIndex(xIndex: Int, x: Double, y: Double) -> Int
     {
         let valsAtIndex = getSelectionDetailsAtIndex(xIndex)
         
@@ -96,7 +96,7 @@ internal class ChartHighlighter
         var vals = [ChartSelectionDetail]()
         var pt = CGPoint()
         
-        for (var i = 0, dataSetCount = _chart?.data?.dataSetCount; i < dataSetCount; i++)
+        for (var i = 0, dataSetCount = _chart?.data?.dataSetCount; i < dataSetCount; i += 1)
         {
             let dataSet = _chart!.data!.getDataSetByIndex(i)
             

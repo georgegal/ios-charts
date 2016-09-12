@@ -96,43 +96,43 @@ public class CombinedChartRenderer: ChartDataRendererBase,
 
     }
     
-    public override func drawData(context context: CGContext?)
+    public override func drawData(context: CGContext?)
     {
         for renderer in _renderers
         {
-            renderer.drawData(context: context)
+            renderer.drawData(context)
         }
     }
     
-    public override func drawValues(context context: CGContext?)
+    public override func drawValues(context: CGContext?)
     {
         for renderer in _renderers
         {
-            renderer.drawValues(context: context)
+            renderer.drawValues(context)
         }
     }
     
-    public override func drawExtras(context context: CGContext?)
+    public override func drawExtras(context: CGContext?)
     {
         for renderer in _renderers
         {
-            renderer.drawExtras(context: context)
+            renderer.drawExtras(context)
         }
     }
     
-    public override func drawHighlighted(context context: CGContext?, indices: [ChartHighlight])
+    public override func drawHighlighted(context: CGContext?, indices: [ChartHighlight])
     {
         for renderer in _renderers
         {
-            renderer.drawHighlighted(context: context, indices: indices)
+            renderer.drawHighlighted(context, indices: indices)
         }
     }
     
-    public override func calcXBounds(chart chart: BarLineChartViewBase, xAxisModulus: Int)
+    public override func calcXBounds(_ chart: BarLineChartViewBase, xAxisModulus: Int)
     {
         for renderer in _renderers
         {
-            renderer.calcXBounds(chart: chart, xAxisModulus: xAxisModulus)
+            renderer.calcXBounds(chart, xAxisModulus: xAxisModulus)
         }
     }
 

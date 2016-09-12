@@ -124,7 +124,7 @@ public class RadarChartView: PieRadarChartViewBase
         _yAxis.axisRange = abs(_yAxis.axisMaximum - _yAxis.axisMinimum)
     }
 
-    public override func getMarkerPosition(entry entry: ChartDataEntry, highlight: ChartHighlight) -> CGPoint
+    public override func getMarkerPosition(entry: ChartDataEntry, highlight: ChartHighlight) -> CGPoint
     {
         let angle = self.sliceAngle * CGFloat(entry.xIndex) + self.rotationAngle
         let val = CGFloat(entry.value) * self.factor
@@ -147,8 +147,8 @@ public class RadarChartView: PieRadarChartViewBase
         
         _yAxis?._defaultValueFormatter = _defaultValueFormatter
         
-        _yAxisRenderer?.computeAxis(yMin: _yAxis.axisMinimum, yMax: _yAxis.axisMaximum)
-        _xAxisRenderer?.computeAxis(xValAverageLength: _data.xValAverageLength, xValues: _data.xVals)
+        _yAxisRenderer?.computeAxis(_yAxis.axisMinimum, yMax: _yAxis.axisMaximum)
+        _xAxisRenderer?.computeAxis(_data.xValAverageLength, xValues: _data.xVals)
         
         if (_legend !== nil && !_legend.isLegendCustom)
         {
@@ -171,31 +171,31 @@ public class RadarChartView: PieRadarChartViewBase
         
         let context = UIGraphicsGetCurrentContext()
         
-        _xAxisRenderer?.renderAxisLabels(context: context)
+        _xAxisRenderer?.renderAxisLabels(context)
 
         if (drawWeb)
         {
-            renderer!.drawExtras(context: context)
+            renderer!.drawExtras(context)
         }
         
-        _yAxisRenderer.renderLimitLines(context: context)
+        _yAxisRenderer.renderLimitLines(context)
 
-        renderer!.drawData(context: context)
+        renderer!.drawData(context)
 
         if (valuesToHighlight())
         {
-            renderer!.drawHighlighted(context: context, indices: _indicesToHightlight)
+            renderer!.drawHighlighted(context, indices: _indicesToHightlight)
         }
 
-        _yAxisRenderer.renderAxisLabels(context: context)
+        _yAxisRenderer.renderAxisLabels(context)
 
-        renderer!.drawValues(context: context)
+        renderer!.drawValues(context)
 
-        _legendRenderer.renderLegend(context: context)
+        _legendRenderer.renderLegend(context)
 
-        drawDescription(context: context)
+        drawDescription(context)
 
-        drawMarkers(context: context)
+        drawMarkers(context)
     }
 
     /// - returns: the factor that is needed to transform values into pixels.
@@ -219,7 +219,7 @@ public class RadarChartView: PieRadarChartViewBase
         
         let sliceAngle = self.sliceAngle
         
-        for (var i = 0; i < _data.xValCount; i++)
+        for i in 0 ..< _data.xValCount
         {
             if (sliceAngle * CGFloat(i + 1) - sliceAngle / 2.0 > a)
             {

@@ -22,9 +22,9 @@ internal class BarChartHighlighter: ChartHighlighter
         super.init(chart: chart)
     }
     
-    internal override func getHighlight(x x: Double, y: Double) -> ChartHighlight?
+    internal override func getHighlight(x: Double, y: Double) -> ChartHighlight?
     {
-        let h = super.getHighlight(x: x, y: y)
+        let h = super.getHighlight(x, y: y)
         
         if h === nil
         {
@@ -43,7 +43,7 @@ internal class BarChartHighlighter: ChartHighlighter
                     // take any transformer to determine the x-axis value
                     _chart?.getTransformer(set.axisDependency).pixelToValue(&pt)
                     
-                    return getStackedHighlight(old: h, set: set, xIndex: h!.xIndex, dataSetIndex: h!.dataSetIndex, yValue: Double(pt.y))
+                    return getStackedHighlight(h, set: set, xIndex: h!.xIndex, dataSetIndex: h!.dataSetIndex, yValue: Double(pt.y))
                 }
             }
             
@@ -86,7 +86,7 @@ internal class BarChartHighlighter: ChartHighlighter
         }
     }
     
-    internal override func getDataSetIndex(xIndex xIndex: Int, x: Double, y: Double) -> Int
+    internal override func getDataSetIndex(xIndex: Int, x: Double, y: Double) -> Int
     {
         if let barChartData = _chart?.data as? BarChartData
         {
@@ -126,7 +126,7 @@ internal class BarChartHighlighter: ChartHighlighter
     /// - parameter dataSetIndex:
     /// - parameter yValue:
     /// - returns:
-    internal func getStackedHighlight(old old: ChartHighlight?, set: BarChartDataSet, xIndex: Int, dataSetIndex: Int, yValue: Double) -> ChartHighlight?
+    internal func getStackedHighlight(old: ChartHighlight?, set: BarChartDataSet, xIndex: Int, dataSetIndex: Int, yValue: Double) -> ChartHighlight?
     {
         let entry = set.entryForXIndex(xIndex) as? BarChartDataEntry
         
@@ -135,9 +135,9 @@ internal class BarChartHighlighter: ChartHighlighter
             return old
         }
 
-        if let ranges = getRanges(entry: entry!)
+        if let ranges = getRanges(entry!)
         {
-            let stackIndex = getClosestStackIndex(ranges: ranges, value: yValue)
+            let stackIndex = getClosestStackIndex(ranges, value: yValue)
             let h = ChartHighlight(xIndex: xIndex, dataSetIndex: dataSetIndex, stackIndex: stackIndex, range: ranges[stackIndex])
             return h
         }
@@ -148,7 +148,7 @@ internal class BarChartHighlighter: ChartHighlighter
     /// - parameter entry:
     /// - parameter value:
     /// - returns:
-    internal func getClosestStackIndex(ranges ranges: [ChartRange]?, value: Double) -> Int
+    internal func getClosestStackIndex(ranges: [ChartRange]?, value: Double) -> Int
     {
         if ranges == nil
         {
@@ -165,7 +165,7 @@ internal class BarChartHighlighter: ChartHighlighter
             }
             else
             {
-                stackIndex++
+                stackIndex += 1
             }
         }
         
@@ -209,7 +209,7 @@ internal class BarChartHighlighter: ChartHighlighter
     /// Splits up the stack-values of the given bar-entry into Range objects.
     /// - parameter entry:
     /// - returns:
-    internal func getRanges(entry entry: BarChartDataEntry) -> [ChartRange]?
+    internal func getRanges(entry: BarChartDataEntry) -> [ChartRange]?
     {
         let values = entry.values
         if (values == nil)
@@ -223,7 +223,7 @@ internal class BarChartHighlighter: ChartHighlighter
         var ranges = [ChartRange]()
         ranges.reserveCapacity(values!.count)
         
-        for (var i = 0, count = values!.count; i < count; i++)
+        for (var i = 0, count = values!.count; i < count; i += 1)
         {
             let value = values![i]
             

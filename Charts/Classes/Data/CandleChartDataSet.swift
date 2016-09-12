@@ -55,7 +55,7 @@ public class CandleChartDataSet: LineScatterCandleChartDataSet
         super.init(yVals: yVals, label: label)
     }
     
-    internal override func calcMinMax(start start: Int, end: Int)
+    internal override func calcMinMax(start: Int, end: Int)
     {
         if (yVals.count == 0)
         {
@@ -81,7 +81,7 @@ public class CandleChartDataSet: LineScatterCandleChartDataSet
         _yMin = entries[start].low
         _yMax = entries[start].high
         
-        for (var i = start + 1; i <= endValue; i++)
+        for (var i = start + 1; i <= endValue; i += 1)
         {
             let e = entries[i]
             

@@ -22,9 +22,9 @@ public class HorizontalBarChartRenderer: BarChartRenderer
         super.init(delegate: delegate, animator: animator, viewPortHandler: viewPortHandler)
     }
     
-    internal override func drawDataSet(context context: CGContext?, dataSet: BarChartDataSet, index: Int)
+    internal override func drawDataSet(context: CGContext?, dataSet: BarChartDataSet, index: Int)
     {
-        CGContextSaveGState(context)
+        CGContextSaveGState(context!)
         
         let barData = delegate!.barChartRendererData(self)
         
@@ -46,7 +46,7 @@ public class HorizontalBarChartRenderer: BarChartRenderer
         var y: Double
         
         // do the drawing
-        for (var j = 0, count = Int(ceil(CGFloat(dataSet.entryCount) * _animator.phaseX)); j < count; j++)
+        for (var j = 0, count = Int(ceil(CGFloat(dataSet.entryCount) * _animator.phaseX)); j < count; j += 1)
         {
             let e = entries[j]
             
@@ -99,13 +99,13 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                     barShadow.size.width = viewPortHandler.contentWidth
                     barShadow.size.height = barRect.size.height
                     
-                    CGContextSetFillColorWithColor(context, dataSet.barShadowColor.CGColor)
-                    CGContextFillRect(context, barShadow)
+                    CGContextSetFillColorWithColor(context!, dataSet.barShadowColor.CGColor)
+                    CGContextFillRect(context!, barShadow)
                 }
                 
                 // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
-                CGContextSetFillColorWithColor(context, dataSet.colorAt(j).CGColor)
-                CGContextFillRect(context, barRect)
+                CGContextSetFillColorWithColor(context!, dataSet.colorAt(j).CGColor)
+                CGContextFillRect(context!, barRect)
             }
             else
             {
@@ -146,12 +146,12 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                     barShadow.size.width = viewPortHandler.contentWidth
                     barShadow.size.height = barRect.size.height
                     
-                    CGContextSetFillColorWithColor(context, dataSet.barShadowColor.CGColor)
-                    CGContextFillRect(context, barShadow)
+                    CGContextSetFillColorWithColor(context!, dataSet.barShadowColor.CGColor)
+                    CGContextFillRect(context!, barShadow)
                 }
                 
                 // fill the stack
-                for (var k = 0; k < vals.count; k++)
+                for k in 0 ..< vals.count
                 {
                     let value = vals[k]
                     
@@ -206,16 +206,16 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                     }
                     
                     // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
-                    CGContextSetFillColorWithColor(context, dataSet.colorAt(k).CGColor)
-                    CGContextFillRect(context, barRect)
+                    CGContextSetFillColorWithColor(context!, dataSet.colorAt(k).CGColor)
+                    CGContextFillRect(context!, barRect)
                 }
             }
         }
         
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context!)
     }
     
-    internal override func prepareBarHighlight(x x: CGFloat, y1: Double, y2: Double, barspacehalf: CGFloat, trans: ChartTransformer, inout rect: CGRect)
+    internal override func prepareBarHighlight(x: CGFloat, y1: Double, y2: Double, barspacehalf: CGFloat, trans: ChartTransformer, inout rect: CGRect)
     {
         let barWidth: CGFloat = 0.5
         
@@ -232,12 +232,12 @@ public class HorizontalBarChartRenderer: BarChartRenderer
         trans.rectValueToPixelHorizontal(&rect, phaseY: _animator.phaseY)
     }
     
-    public override func getTransformedValues(trans trans: ChartTransformer, entries: [BarChartDataEntry], dataSetIndex: Int) -> [CGPoint]
+    public override func getTransformedValues(trans: ChartTransformer, entries: [BarChartDataEntry], dataSetIndex: Int) -> [CGPoint]
     {
         return trans.generateTransformedValuesHorizontalBarChart(entries, dataSet: dataSetIndex, barData: delegate!.barChartRendererData(self)!, phaseY: _animator.phaseY)
     }
     
-    public override func drawValues(context context: CGContext?)
+    public override func drawValues(context: CGContext?)
     {
         // if values are drawn
         if (passesCheck())
@@ -256,7 +256,7 @@ public class HorizontalBarChartRenderer: BarChartRenderer
             var posOffset: CGFloat
             var negOffset: CGFloat
             
-            for (var i = 0, count = barData.dataSetCount; i < count; i++)
+            for (var i = 0, count = barData.dataSetCount; i < count; i += 1)
             {
                 let dataSet = dataSets[i] as! BarChartDataSet
                 
@@ -281,12 +281,12 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                 
                 var entries = dataSet.yVals as! [BarChartDataEntry]
                 
-                var valuePoints = getTransformedValues(trans: trans, entries: entries, dataSetIndex: i)
+                var valuePoints = getTransformedValues(trans, entries: entries, dataSetIndex: i)
                 
                 // if only single values are drawn (sum)
                 if (!dataSet.isStacked)
                 {
-                    for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j++)
+                    for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j += 1)
                     {
                         if (!viewPortHandler.isInBoundsTop(valuePoints[j].y))
                         {
@@ -317,8 +317,7 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                             negOffset = -negOffset - valueTextWidth
                         }
                         
-                        drawValue(
-                            context: context,
+                        drawValue(context,
                             value: valueText,
                             xPos: valuePoints[j].x + (val >= 0.0 ? posOffset : negOffset),
                             yPos: valuePoints[j].y + yOffset,
@@ -331,7 +330,7 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                 {
                     // if each value of a potential stack should be drawn
                     
-                    for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j++)
+                    for (var j = 0, count = Int(ceil(CGFloat(valuePoints.count) * _animator.phaseX)); j < count; j += 1)
                     {
                         let e = entries[j]
                         
@@ -369,8 +368,7 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                                 negOffset = -negOffset - valueTextWidth
                             }
                             
-                            drawValue(
-                                context: context,
+                            drawValue(context,
                                 value: valueText,
                                 xPos: valuePoints[j].x + (val >= 0.0 ? posOffset : negOffset),
                                 yPos: valuePoints[j].y + yOffset,
@@ -386,7 +384,7 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                             var posY = 0.0
                             var negY = -e.negativeSum
                             
-                            for (var k = 0; k < vals.count; k++)
+                            for k in 0 ..< vals.count
                             {
                                 let value = vals[k]
                                 var y: Double
@@ -407,7 +405,7 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                             
                             trans.pointValuesToPixel(&transformed)
                             
-                            for (var k = 0; k < transformed.count; k++)
+                            for k in 0 ..< transformed.count
                             {
                                 let val = vals[k]
                                 let valueText = formatter!.stringFromNumber(val)!
@@ -441,7 +439,7 @@ public class HorizontalBarChartRenderer: BarChartRenderer
                                     continue
                                 }
                                 
-                                drawValue(context: context,
+                                drawValue(context,
                                     value: valueText,
                                     xPos: x,
                                     yPos: y + yOffset,

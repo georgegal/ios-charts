@@ -51,7 +51,7 @@ public enum ChartEasingOption: Int
     case EaseInOutBounce
 }
 
-public typealias ChartEasingFunctionBlock = ((elapsed: NSTimeInterval, duration: NSTimeInterval) -> CGFloat)
+public typealias ChartEasingFunctionBlock = ((_: NSTimeInterval, _: NSTimeInterval) -> CGFloat)
 
 internal func easingFunctionFromOption(easing: ChartEasingOption) -> ChartEasingFunctionBlock
 {
@@ -340,7 +340,7 @@ internal struct EasingFunctions
     internal static let EaseOutBack = { (elapsed: NSTimeInterval, duration: NSTimeInterval) -> CGFloat in
         let s: NSTimeInterval = 1.70158
         var position: NSTimeInterval = elapsed / duration
-        position--
+        position -= 1
         return CGFloat( (position * position * ((s + 1.0) * position + s) + 1.0) )
     }
     

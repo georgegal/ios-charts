@@ -23,7 +23,7 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
     }
 
     /// Computes the axis values.
-    public override func computeAxis(var yMin yMin: Double, var yMax: Double)
+    public override func computeAxis(var yMin: Double, var yMax: Double)
     {
         // calculate the starting and entry point of the y-labels (depending on zoom / contentrect bounds)
         if (viewPortHandler.contentHeight > 10.0 && !viewPortHandler.isFullyZoomedOutX)
@@ -43,11 +43,11 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
             }
         }
         
-        computeAxisValues(min: yMin, max: yMax)
+        computeAxisValues(yMin, max: yMax)
     }
 
     /// draws the y-axis labels to the screen
-    public override func renderAxisLabels(context context: CGContext?)
+    public override func renderAxisLabels(context: CGContext?)
     {
         if (!_yAxis.isEnabled || !_yAxis.isDrawLabelsEnabled)
         {
@@ -57,7 +57,7 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
         var positions = [CGPoint]()
         positions.reserveCapacity(_yAxis.entries.count)
         
-        for (var i = 0; i < _yAxis.entries.count; i++)
+        for i in 0 ..< _yAxis.entries.count
         {
             positions.append(CGPoint(x: CGFloat(_yAxis.entries[i]), y: 0.0))
         }
@@ -99,29 +99,29 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
         // And here we pull the line back up
         yPos -= lineHeight
         
-        drawYLabels(context: context, fixedPosition: yPos, positions: positions, offset: _yAxis.yOffset)
+        drawYLabels(context, fixedPosition: yPos, positions: positions, offset: _yAxis.yOffset)
     }
     
     private var _axisLineSegmentsBuffer = [CGPoint](count: 2, repeatedValue: CGPoint())
     
-    public override func renderAxisLine(context context: CGContext?)
+    public override func renderAxisLine(context: CGContext?)
     {
         if (!_yAxis.isEnabled || !_yAxis.drawAxisLineEnabled)
         {
             return
         }
         
-        CGContextSaveGState(context)
+        CGContextSaveGState(context!)
         
-        CGContextSetStrokeColorWithColor(context, _yAxis.axisLineColor.CGColor)
-        CGContextSetLineWidth(context, _yAxis.axisLineWidth)
+        CGContextSetStrokeColorWithColor(context!, _yAxis.axisLineColor.CGColor)
+        CGContextSetLineWidth(context!, _yAxis.axisLineWidth)
         if (_yAxis.axisLineDashLengths != nil)
         {
-            CGContextSetLineDash(context, _yAxis.axisLineDashPhase, _yAxis.axisLineDashLengths, _yAxis.axisLineDashLengths.count)
+            CGContextSetLineDash(context!, _yAxis.axisLineDashPhase, _yAxis.axisLineDashLengths, _yAxis.axisLineDashLengths.count)
         }
         else
         {
-            CGContextSetLineDash(context, 0.0, nil, 0)
+            CGContextSetLineDash(context!, 0.0, nil, 0)
         }
 
         if (_yAxis.axisDependency == .Left)
@@ -130,7 +130,7 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
             _axisLineSegmentsBuffer[0].y = viewPortHandler.contentTop
             _axisLineSegmentsBuffer[1].x = viewPortHandler.contentRight
             _axisLineSegmentsBuffer[1].y = viewPortHandler.contentTop
-            CGContextStrokeLineSegments(context, _axisLineSegmentsBuffer, 2)
+            CGContextStrokeLineSegments(context!, _axisLineSegmentsBuffer, 2)
         }
         else
         {
@@ -138,19 +138,19 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
             _axisLineSegmentsBuffer[0].y = viewPortHandler.contentBottom
             _axisLineSegmentsBuffer[1].x = viewPortHandler.contentRight
             _axisLineSegmentsBuffer[1].y = viewPortHandler.contentBottom
-            CGContextStrokeLineSegments(context, _axisLineSegmentsBuffer, 2)
+            CGContextStrokeLineSegments(context!, _axisLineSegmentsBuffer, 2)
         }
         
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context!)
     }
 
     /// draws the y-labels on the specified x-position
-    internal func drawYLabels(context context: CGContext?, fixedPosition: CGFloat, positions: [CGPoint], offset: CGFloat)
+    internal func drawYLabels(context: CGContext?, fixedPosition: CGFloat, positions: [CGPoint], offset: CGFloat)
     {
         let labelFont = _yAxis.labelFont
         let labelTextColor = _yAxis.labelTextColor
         
-        for (var i = 0; i < _yAxis.entryCount; i++)
+        for i in 0 ..< _yAxis.entryCount
         {
             let text = _yAxis.getFormattedLabel(i)
             
@@ -159,52 +159,52 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
                 return
             }
             
-            ChartUtils.drawText(context: context, text: text, point: CGPoint(x: positions[i].x, y: fixedPosition - offset), align: .Center, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor])
+            ChartUtils.drawText(context, text: text, point: CGPoint(x: positions[i].x, y: fixedPosition - offset), align: .Center, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor])
         }
     }
 
-    public override func renderGridLines(context context: CGContext?)
+    public override func renderGridLines(context: CGContext?)
     {
         if (!_yAxis.isEnabled || !_yAxis.isDrawGridLinesEnabled)
         {
             return
         }
         
-        CGContextSaveGState(context)
+        CGContextSaveGState(context!)
         
         // pre alloc
         var position = CGPoint()
         
-        CGContextSetStrokeColorWithColor(context, _yAxis.gridColor.CGColor)
-        CGContextSetLineWidth(context, _yAxis.gridLineWidth)
+        CGContextSetStrokeColorWithColor(context!, _yAxis.gridColor.CGColor)
+        CGContextSetLineWidth(context!, _yAxis.gridLineWidth)
         if (_yAxis.gridLineDashLengths != nil)
         {
-            CGContextSetLineDash(context, _yAxis.gridLineDashPhase, _yAxis.gridLineDashLengths, _yAxis.gridLineDashLengths.count)
+            CGContextSetLineDash(context!, _yAxis.gridLineDashPhase, _yAxis.gridLineDashLengths, _yAxis.gridLineDashLengths.count)
         }
         else
         {
-            CGContextSetLineDash(context, 0.0, nil, 0)
+            CGContextSetLineDash(context!, 0.0, nil, 0)
         }
         
         // draw the horizontal grid
-        for (var i = 0; i < _yAxis.entryCount; i++)
+        for i in 0 ..< _yAxis.entryCount
         {
             position.x = CGFloat(_yAxis.entries[i])
             position.y = 0.0
             transformer.pointValueToPixel(&position)
             
-            CGContextBeginPath(context)
-            CGContextMoveToPoint(context, position.x, viewPortHandler.contentTop)
-            CGContextAddLineToPoint(context, position.x, viewPortHandler.contentBottom)
-            CGContextStrokePath(context)
+            CGContextBeginPath(context!)
+            CGContextMoveToPoint(context!, position.x, viewPortHandler.contentTop)
+            CGContextAddLineToPoint(context!, position.x, viewPortHandler.contentBottom)
+            CGContextStrokePath(context!)
         }
         
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context!)
     }
     
     private var _limitLineSegmentsBuffer = [CGPoint](count: 2, repeatedValue: CGPoint())
     
-    public override func renderLimitLines(context context: CGContext?)
+    public override func renderLimitLines(context: CGContext?)
     {
         var limitLines = _yAxis.limitLines
 
@@ -213,13 +213,13 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
             return
         }
         
-        CGContextSaveGState(context)
+        CGContextSaveGState(context!)
         
         let trans = transformer.valueToPixelMatrix
         
         var position = CGPoint(x: 0.0, y: 0.0)
         
-        for (var i = 0; i < limitLines.count; i++)
+        for i in 0 ..< limitLines.count
         {
             let l = limitLines[i]
             
@@ -232,18 +232,18 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
             _limitLineSegmentsBuffer[1].x = position.x
             _limitLineSegmentsBuffer[1].y = viewPortHandler.contentBottom
             
-            CGContextSetStrokeColorWithColor(context, l.lineColor.CGColor)
-            CGContextSetLineWidth(context, l.lineWidth)
+            CGContextSetStrokeColorWithColor(context!, l.lineColor.CGColor)
+            CGContextSetLineWidth(context!, l.lineWidth)
             if (l.lineDashLengths != nil)
             {
-                CGContextSetLineDash(context, l.lineDashPhase, l.lineDashLengths!, l.lineDashLengths!.count)
+                CGContextSetLineDash(context!, l.lineDashPhase, l.lineDashLengths!, l.lineDashLengths!.count)
             }
             else
             {
-                CGContextSetLineDash(context, 0.0, nil, 0)
+                CGContextSetLineDash(context!, 0.0, nil, 0)
             }
             
-            CGContextStrokeLineSegments(context, _limitLineSegmentsBuffer, 2)
+            CGContextStrokeLineSegments(context!, _limitLineSegmentsBuffer, 2)
 
             let label = l.label
 
@@ -258,7 +258,7 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
 
                 if (l.labelPosition == .RightTop)
                 {
-                    ChartUtils.drawText(context: context,
+                    ChartUtils.drawText(context,
                         text: label,
                         point: CGPoint(
                             x: position.x + xOffset,
@@ -268,7 +268,7 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
                 }
                 else if (l.labelPosition == .RightBottom)
                 {
-                    ChartUtils.drawText(context: context,
+                    ChartUtils.drawText(context,
                         text: label,
                         point: CGPoint(
                             x: position.x + xOffset,
@@ -278,7 +278,7 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
                 }
                 else if (l.labelPosition == .LeftTop)
                 {
-                    ChartUtils.drawText(context: context,
+                    ChartUtils.drawText(context,
                         text: label,
                         point: CGPoint(
                             x: position.x - xOffset,
@@ -288,7 +288,7 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
                 }
                 else
                 {
-                    ChartUtils.drawText(context: context,
+                    ChartUtils.drawText(context,
                         text: label,
                         point: CGPoint(
                             x: position.x - xOffset,
@@ -299,6 +299,6 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
             }
         }
         
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context!)
     }
 }

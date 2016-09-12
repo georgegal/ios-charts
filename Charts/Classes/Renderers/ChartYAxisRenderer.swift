@@ -27,8 +27,11 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
     }
     
     /// Computes the axis values.
-    public func computeAxis(var yMin: Double, var yMax: Double)
+    public func computeAxis(yMin: Double, yMax: Double)
     {
+        var yMin = yMin
+        var yMax = yMax
+        
         // calculate the starting and entry point of the y-labels (depending on
         // zoom / contentrect bounds)
         if (viewPortHandler.contentWidth > 10.0 && !viewPortHandler.isFullyZoomedOutY)
@@ -96,7 +99,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
             
             var v = yMin
             
-            for i in 0 ..< labelCount
+            for _ in 0 ..< labelCount
             {
                 _yAxis.entries.append(v)
                 v += step

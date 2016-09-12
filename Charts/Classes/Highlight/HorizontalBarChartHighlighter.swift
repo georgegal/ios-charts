@@ -17,7 +17,7 @@ import CoreGraphics
 
 internal class HorizontalBarChartHighlighter: BarChartHighlighter
 {
-    internal override func getHighlight(_ x: Double, y: Double) -> ChartHighlight?
+    internal override func getHighlight(x: Double, y: Double) -> ChartHighlight?
     {
         let h = super.getHighlight(x, y: y)
         

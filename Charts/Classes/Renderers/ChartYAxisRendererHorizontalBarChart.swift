@@ -23,8 +23,10 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
     }
 
     /// Computes the axis values.
-    public override func computeAxis(var yMin: Double, var yMax: Double)
+    public override func computeAxis(yMin: Double, yMax: Double)
     {
+        var yMin = yMin
+        var yMax = yMax
         // calculate the starting and entry point of the y-labels (depending on zoom / contentrect bounds)
         if (viewPortHandler.contentHeight > 10.0 && !viewPortHandler.isFullyZoomedOutX)
         {

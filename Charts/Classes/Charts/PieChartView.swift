@@ -106,7 +106,7 @@ public class PieChartView: PieRadarChartViewBase
         calcAngles()
     }
     
-    public override func getMarkerPosition(_ e: ChartDataEntry, highlight: ChartHighlight) -> CGPoint
+    public override func getMarkerPosition(e: ChartDataEntry, highlight: ChartHighlight) -> CGPoint
     {
         let center = self.centerCircleBox
         var r = self.radius

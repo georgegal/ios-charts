@@ -128,7 +128,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
         }
     }
     
-    public override func calcXBounds(_ chart: BarLineChartViewBase, xAxisModulus: Int)
+    public override func calcXBounds(chart: BarLineChartViewBase, xAxisModulus: Int)
     {
         for renderer in _renderers
         {
@@ -137,7 +137,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
     }
 
     /// - returns: the sub-renderer object at the specified index.
-    public func getSubRenderer(index index: Int) -> ChartDataRendererBase?
+    public func getSubRenderer(index: Int) -> ChartDataRendererBase?
     {
         if (index >= _renderers.count || index < 0)
         {

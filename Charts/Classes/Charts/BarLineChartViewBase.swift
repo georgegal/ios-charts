@@ -863,11 +863,12 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
         }
     }
     
-    private func performPanChange(var translation: CGPoint) -> Bool
+    private func performPanChange(translation: CGPoint) -> Bool
     {
         if (isAnyAxisInverted && _closestDataSetToTouch !== nil
             && getAxis(_closestDataSetToTouch.axisDependency).isInverted)
         {
+            var translation = translation
             if (self is HorizontalBarChartView)
             {
                 translation.x = -translation.x
@@ -1408,8 +1409,9 @@ public class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     /// (encapsulated in a `CGPoint`). This method transforms pixel coordinates to
     /// coordinates / values in the chart. This is the opposite method to
     /// `getPixelsForValues(...)`.
-    public func getValueByTouchPoint(var pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGPoint
+    public func getValueByTouchPoint( pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGPoint
     {
+        var pt = pt
         getTransformer(axis).pixelToValue(&pt)
 
         return pt

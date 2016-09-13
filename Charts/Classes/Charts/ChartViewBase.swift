@@ -938,7 +938,7 @@ public class ChartViewBase: UIView, ChartAnimatorDelegate
         }
     }
     
-    public override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?)
+    public override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?)
     {
         if (!_interceptTouchEvents)
         {

@@ -585,7 +585,7 @@ public class PieRadarChartViewBase: ChartViewBase
         }
     }
     
-    public override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?)
+    public override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?)
     {
         super.touchesCancelled(touches, withEvent: event)
         

@@ -119,7 +119,7 @@ public class ChartDataSet: NSObject
         _yMin = DBL_MAX
         _yMax = -DBL_MAX
         
-        for (var i = start; i <= endValue; i += 1)
+        for i in 0 ... endValue
         {
             let e = _yVals[i]
             
@@ -202,7 +202,7 @@ public class ChartDataSet: NSObject
                 }
                 
                 high = _yVals.count
-                for (; m < high; m += 1)
+                for m in m ..< high
                 {
                     entry = _yVals[m]
                     if (entry.xIndex == x)
@@ -472,8 +472,10 @@ public class ChartDataSet: NSObject
         colors.append(color)
     }
     
-    public func colorAt(var index: Int) -> UIColor
+    public func colorAt(index: Int) -> UIColor
     {
+        var index = index
+        
         if (index < 0)
         {
             index = 0

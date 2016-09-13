@@ -249,7 +249,8 @@ internal struct EasingFunctions
         {
             return CGFloat( 0.5 * pow(2.0, 10.0 * (position - 1.0)) )
         }
-        return CGFloat( 0.5 * (-pow(2.0, -10.0 * --position) + 2.0) )
+        position -= 1
+        return CGFloat( 0.5 * (-pow(2.0, -10.0 * position) + 2.0) )
     }
     
     internal static let EaseInCirc = { (elapsed: NSTimeInterval, duration: NSTimeInterval) -> CGFloat in

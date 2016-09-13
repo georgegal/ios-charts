@@ -81,7 +81,7 @@ public class CandleChartDataSet: LineScatterCandleChartDataSet
         _yMin = entries[start].low
         _yMax = entries[start].high
         
-        for (var i = start + 1; i <= endValue; i += 1)
+        for i in start+1 ... endValue
         {
             let e = entries[i]
             

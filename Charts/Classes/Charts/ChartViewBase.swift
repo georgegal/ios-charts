@@ -942,7 +942,7 @@ public class ChartViewBase: UIView, ChartAnimatorDelegate
     {
         if (!_interceptTouchEvents)
         {
-            super.touchesCancelled(touches, withEvent: event)
+            super.touchesCancelled(touches!, withEvent: event)
         }
     }
 }

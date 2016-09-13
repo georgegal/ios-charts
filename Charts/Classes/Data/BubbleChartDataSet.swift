@@ -56,7 +56,7 @@ public class BubbleChartDataSet: BarLineScatterCandleBubbleChartDataSet
         _yMin = yMin(entries[start])
         _yMax = yMax(entries[start])
         
-        for (var i = start; i <= endValue; i += 1)
+        for i in start ... endValue
         {
             let entry = entries[i]
 

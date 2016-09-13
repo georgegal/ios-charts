@@ -204,7 +204,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
         _yMin = DBL_MAX
         _yMax = -DBL_MAX
         
-        for (var i = start; i <= endValue; i += 1)
+        for i in start ... endValue
         {
             if let e = _yVals[i] as? BarChartDataEntry
             {

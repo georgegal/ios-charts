@@ -26,7 +26,7 @@
 		5B57BBB51A9B26AA0036A6CC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B57BBB41A9B26AA0036A6CC /* main.m */; };
 		5B57BBB81A9B26AA0036A6CC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B57BBB71A9B26AA0036A6CC /* AppDelegate.m */; };
 		5B57BBBB1A9B26AA0036A6CC /* DemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B57BBBA1A9B26AA0036A6CC /* DemoListViewController.m */; };
-		5B6654D11BB0A36F00890030 /* MyCustomXValueFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6654D01BB0A36F00890030 /* MyCustomXValueFormatter.m */; settings = {ASSET_TAGS = (); }; };
+		5B6654D11BB0A36F00890030 /* MyCustomXValueFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6654D01BB0A36F00890030 /* MyCustomXValueFormatter.m */; };
 		5B8EAF241AB3271B009697AA /* DemoListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B8EAF231AB3271B009697AA /* DemoListViewController.xib */; };
 		5B8EAF281AB32CF5009697AA /* DemoBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EAF261AB32CF5009697AA /* DemoBaseViewController.m */; };
 		5B8EAF301AB32E15009697AA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B8EAF2F1AB32E15009697AA /* Images.xcassets */; };
@@ -81,6 +81,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 5BA8EC3F1A9D14DC00CE82E1;
 			remoteInfo = Charts;
+		};
+		D67378B01EE215CD0069AB61 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B8EAF321AB32EA0009697AA /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A52C5C371BAC5CA400594CDD;
+			remoteInfo = ChartsTV;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -280,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				5B8EAF371AB32EA1009697AA /* Charts.framework */,
+				D67378B11EE215CD0069AB61 /* ChartsTV.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -390,6 +398,7 @@
 				TargetAttributes = {
 					5B57BBAE1A9B26AA0036A6CC = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0830;
 					};
 				};
 			};
@@ -423,6 +432,13 @@
 			fileType = wrapper.framework;
 			path = Charts.framework;
 			remoteRef = 5B8EAF361AB32EA1009697AA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D67378B11EE215CD0069AB61 /* ChartsTV.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ChartsTV.framework;
+			remoteRef = D67378B01EE215CD0069AB61 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -601,6 +617,7 @@
 				PRODUCT_NAME = ChartsDemo;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/ChartsDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -615,6 +632,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dcg.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ChartsDemo;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/ChartsDemo-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

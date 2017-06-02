@@ -22,7 +22,7 @@ internal class BarChartHighlighter: ChartHighlighter
         super.init(chart: chart)
     }
     
-    internal override func getHighlight(x: Double, y: Double) -> ChartHighlight?
+    internal override func getHighlight(_ x: Double, y: Double) -> ChartHighlight?
     {
         let h = super.getHighlight(x, y: y)
         
@@ -51,7 +51,7 @@ internal class BarChartHighlighter: ChartHighlighter
         }
     }
     
-    internal override func getXIndex(x: Double) -> Int
+    internal override func getXIndex(_ x: Double) -> Int
     {
         if let barChartData = _chart?.data as? BarChartData
         {
@@ -86,7 +86,7 @@ internal class BarChartHighlighter: ChartHighlighter
         }
     }
     
-    internal override func getDataSetIndex(xIndex: Int, x: Double, y: Double) -> Int
+    internal override func getDataSetIndex(_ xIndex: Int, x: Double, y: Double) -> Int
     {
         if let barChartData = _chart?.data as? BarChartData
         {
@@ -126,11 +126,11 @@ internal class BarChartHighlighter: ChartHighlighter
     /// - parameter dataSetIndex:
     /// - parameter yValue:
     /// - returns:
-    internal func getStackedHighlight(old: ChartHighlight?, set: BarChartDataSet, xIndex: Int, dataSetIndex: Int, yValue: Double) -> ChartHighlight?
+    internal func getStackedHighlight(_ old: ChartHighlight?, set: BarChartDataSet, xIndex: Int, dataSetIndex: Int, yValue: Double) -> ChartHighlight?
     {
         let entry = set.entryForXIndex(xIndex) as? BarChartDataEntry
         
-        if entry?.values === nil
+        if entry?.values == nil
         {
             return old
         }
@@ -148,7 +148,7 @@ internal class BarChartHighlighter: ChartHighlighter
     /// - parameter entry:
     /// - parameter value:
     /// - returns:
-    internal func getClosestStackIndex(ranges: [ChartRange]?, value: Double) -> Int
+    internal func getClosestStackIndex(_ ranges: [ChartRange]?, value: Double) -> Int
     {
         if ranges == nil
         {
@@ -177,7 +177,7 @@ internal class BarChartHighlighter: ChartHighlighter
     /// Returns the base x-value to the corresponding x-touch value in pixels.
     /// - parameter x:
     /// - returns:
-    internal func getBase(x: Double) -> Double
+    internal func getBase(_ x: Double) -> Double
     {
         if let barChartData = _chart?.data as? BarChartData
         {
@@ -186,11 +186,10 @@ internal class BarChartHighlighter: ChartHighlighter
             pt.x = CGFloat(x)
             
             // take any transformer to determine the x-axis value
-            _chart?.getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
+            _chart?.getTransformer(ChartYAxis.AxisDependency.left).pixelToValue(&pt)
             let xVal = Double(pt.x)
             
-            let setCount = barChartData.dataSetCount ?? 0
-            
+            let setCount = barChartData.dataSetCount      
             // calculate how often the group-space appears
             let steps = Int(xVal / (Double(setCount) + Double(barChartData.groupSpace)))
             
@@ -209,7 +208,7 @@ internal class BarChartHighlighter: ChartHighlighter
     /// Splits up the stack-values of the given bar-entry into Range objects.
     /// - parameter entry:
     /// - returns:
-    internal func getRanges(entry: BarChartDataEntry) -> [ChartRange]?
+    internal func getRanges(_ entry: BarChartDataEntry) -> [ChartRange]?
     {
         let values = entry.values
         if (values == nil)

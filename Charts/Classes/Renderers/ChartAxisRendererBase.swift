@@ -14,7 +14,7 @@
 import Foundation
 import UIKit
 
-public class ChartAxisRendererBase: ChartRendererBase
+open class ChartAxisRendererBase: ChartRendererBase
 {
     internal var transformer: ChartTransformer!
     
@@ -31,25 +31,25 @@ public class ChartAxisRendererBase: ChartRendererBase
     }
     
     /// Draws the axis labels on the specified context
-    public func renderAxisLabels(context: CGContext?)
+    open func renderAxisLabels(_ context: CGContext?)
     {
         fatalError("renderAxisLabels() cannot be called on ChartAxisRendererBase")
     }
     
     /// Draws the grid lines belonging to the axis.
-    public func renderGridLines(context: CGContext?)
+    open func renderGridLines(_ context: CGContext?)
     {
         fatalError("renderGridLines() cannot be called on ChartAxisRendererBase")
     }
     
     /// Draws the line that goes alongside the axis.
-    public func renderAxisLine(context: CGContext?)
+    open func renderAxisLine(_ context: CGContext?)
     {
         fatalError("renderAxisLine() cannot be called on ChartAxisRendererBase")
     }
     
     /// Draws the LimitLines associated with this axis to the screen.
-    public func renderLimitLines(context: CGContext?)
+    open func renderLimitLines(_ context: CGContext?)
     {
         fatalError("renderLimitLines() cannot be called on ChartAxisRendererBase")
     }

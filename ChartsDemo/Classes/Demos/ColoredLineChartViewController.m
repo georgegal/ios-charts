@@ -56,7 +56,7 @@
     chart.dragEnabled = YES;
     [chart setScaleEnabled:YES];
     chart.pinchZoomEnabled = NO;
-    [chart setViewPortOffsetsWithLeft:10.0 top:0.0 right:10.0 bottom:0.0];
+//    [chart setViewPortOffsetsWithLeft:10.0 top:0.0 right:10.0 bottom:0.0];
     
     chart.legend.enabled = NO;
     

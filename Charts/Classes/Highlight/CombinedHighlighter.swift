@@ -25,7 +25,7 @@ internal class CombinedHighlighter: ChartHighlighter
     /// Returns a list of SelectionDetail object corresponding to the given xIndex.
     /// - parameter xIndex:
     /// - returns:
-    internal override func getSelectionDetailsAtIndex(xIndex: Int) -> [ChartSelectionDetail]
+    internal override func getSelectionDetailsAtIndex(_ xIndex: Int) -> [ChartSelectionDetail]
     {
         var vals = [ChartSelectionDetail]()
         
@@ -43,25 +43,25 @@ internal class CombinedHighlighter: ChartHighlighter
                     let dataSet = dataObjects[i].getDataSetByIndex(j)
                     
                     // dont include datasets that cannot be highlighted
-                    if !dataSet.isHighlightEnabled
+                    if !(dataSet?.isHighlightEnabled)!
                     {
                         continue
                     }
                     
                     // extract all y-values from all DataSets at the given x-index
-                    let yVal = dataSet.yValForXIndex(xIndex)
-                    if yVal.isNaN
+                    let yVal = dataSet?.yValForXIndex(xIndex)
+                    if (yVal?.isNaN)!
                     {
                         continue
                     }
                     
-                    pt.y = CGFloat(yVal)
+                    pt.y = CGFloat(yVal!)
                     
-                    _chart!.getTransformer(dataSet.axisDependency).pointValueToPixel(&pt)
+                    _chart!.getTransformer((dataSet?.axisDependency)!).pointValueToPixel(&pt)
                     
                     if !pt.y.isNaN
                     {
-                        vals.append(ChartSelectionDetail(value: Double(pt.y), dataSetIndex: j, dataSet: dataSet))
+                        vals.append(ChartSelectionDetail(value: Double(pt.y), dataSetIndex: j, dataSet: dataSet!))
                     }
                 }
             }

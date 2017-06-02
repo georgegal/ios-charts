@@ -14,7 +14,7 @@
 import Foundation
 import CoreGraphics
 
-public class ChartDataRendererBase: ChartRendererBase
+open class ChartDataRendererBase: ChartRendererBase
 {
     internal var _animator: ChartAnimator!
     
@@ -24,22 +24,22 @@ public class ChartDataRendererBase: ChartRendererBase
         _animator = animator
     }
 
-    public func drawData(context: CGContext?)
+    open func drawData(_ context: CGContext?)
     {
         fatalError("drawData() cannot be called on ChartDataRendererBase")
     }
     
-    public func drawValues(context: CGContext?)
+    open func drawValues(_ context: CGContext?)
     {
         fatalError("drawValues() cannot be called on ChartDataRendererBase")
     }
     
-    public func drawValues(context: CGContext?, indices: [ChartHighlight]?)
+    open func drawValues(_ context: CGContext?, indices: [ChartHighlight]?)
     {
         fatalError("drawValues() cannot be called on ChartDataRendererBase")
     }
     
-    public func drawExtras(context: CGContext?)
+    open func drawExtras(_ context: CGContext?)
     {
         fatalError("drawExtras() cannot be called on ChartDataRendererBase")
     }
@@ -47,7 +47,7 @@ public class ChartDataRendererBase: ChartRendererBase
     /// Draws all highlight indicators for the values that are currently highlighted.
     ///
     /// - parameter indices: the highlighted values
-    public func drawHighlighted(context: CGContext?, indices: [ChartHighlight])
+    open func drawHighlighted(_ context: CGContext?, indices: [ChartHighlight])
     {
         fatalError("drawHighlighted() cannot be called on ChartDataRendererBase")
     }

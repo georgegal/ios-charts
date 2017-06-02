@@ -75,7 +75,7 @@
 {
     [super viewWillAppear:animated];
     // select first chart index
-    [_chartView highlightValueWithXIndex:0 dataSetIndex:0 callDelegate:YES];
+//    [_chartView highlightValueWithXIndex:0 dataSetIndex:0 callDelegate:YES];
 }
 
 - (void)didReceiveMemoryWarning

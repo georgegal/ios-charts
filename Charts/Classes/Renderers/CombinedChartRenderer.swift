@@ -14,30 +14,30 @@
 import Foundation
 import CoreGraphics
 
-public class CombinedChartRenderer: ChartDataRendererBase,
+open class CombinedChartRenderer: ChartDataRendererBase,
     LineChartRendererDelegate,
     BarChartRendererDelegate,
     ScatterChartRendererDelegate,
     CandleStickChartRendererDelegate,
     BubbleChartRendererDelegate
 {
-    private weak var _chart: CombinedChartView!
+    fileprivate weak var _chart: CombinedChartView!
     
     /// flag that enables or disables the highlighting arrow
-    public var drawHighlightArrowEnabled = false
+    open var drawHighlightArrowEnabled = false
     
     /// if set to true, the current selected value text is highlighted
-    public var drawValueHighlightedEnabled = false
+    open var drawValueHighlightedEnabled = false
     
     /// if set to true, all values are drawn above their bars, instead of below their top
-    public var drawValueAboveBarEnabled = true
+    open var drawValueAboveBarEnabled = true
     
     /// if set to true, a grey area is darawn behind each bar that indicates the maximum value
-    public var drawBarShadowEnabled = true
+    open var drawBarShadowEnabled = true
     
     internal var _renderers = [ChartDataRendererBase]()
     
-    internal var _drawOrder: [CombinedChartView.CombinedChartDrawOrder] = [.Bar, .Bubble, .Line, .Candle, .Scatter]
+    internal var _drawOrder: [CombinedChartView.CombinedChartDrawOrder] = [.bar, .bubble, .line, .candle, .scatter]
     
     public init(chart: CombinedChartView, animator: ChartAnimator, viewPortHandler: ChartViewPortHandler)
     {
@@ -57,35 +57,35 @@ public class CombinedChartRenderer: ChartDataRendererBase,
         {
             switch (order)
             {
-            case .Bar:
+            case .bar:
                 if (_chart.barData !== nil)
                 {
                     _renderers.append(BarChartRenderer(delegate: self, animator: _animator, viewPortHandler: viewPortHandler))
                 }
                 break
                 
-            case .Line:
+            case .line:
                 if (_chart.lineData !== nil)
                 {
                     _renderers.append(LineChartRenderer(delegate: self, animator: _animator, viewPortHandler: viewPortHandler))
                 }
                 break
                 
-            case .Candle:
+            case .candle:
                 if (_chart.candleData !== nil)
                 {
                     _renderers.append(CandleStickChartRenderer(delegate: self, animator: _animator, viewPortHandler: viewPortHandler))
                 }
                 break
                 
-            case .Scatter:
+            case .scatter:
                 if (_chart.scatterData !== nil)
                 {
                     _renderers.append(ScatterChartRenderer(delegate: self, animator: _animator, viewPortHandler: viewPortHandler))
                 }
                 break
                 
-            case .Bubble:
+            case .bubble:
                 if (_chart.bubbleData !== nil)
                 {
                     _renderers.append(BubbleChartRenderer(delegate: self, animator: _animator, viewPortHandler: viewPortHandler))
@@ -96,7 +96,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
 
     }
     
-    public override func drawData(context: CGContext?)
+    open override func drawData(_ context: CGContext?)
     {
         for renderer in _renderers
         {
@@ -104,7 +104,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
         }
     }
     
-    public override func drawValues(context: CGContext?)
+    open override func drawValues(_ context: CGContext?)
     {
         for renderer in _renderers
         {
@@ -112,7 +112,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
         }
     }
     
-    public override func drawExtras(context: CGContext?)
+    open override func drawExtras(_ context: CGContext?)
     {
         for renderer in _renderers
         {
@@ -120,7 +120,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
         }
     }
     
-    public override func drawHighlighted(context: CGContext?, indices: [ChartHighlight])
+    open override func drawHighlighted(_ context: CGContext?, indices: [ChartHighlight])
     {
         for renderer in _renderers
         {
@@ -128,7 +128,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
         }
     }
     
-    public override func calcXBounds(chart: BarLineChartViewBase, xAxisModulus: Int)
+    open override func calcXBounds(_ chart: BarLineChartViewBase, xAxisModulus: Int)
     {
         for renderer in _renderers
         {
@@ -137,7 +137,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
     }
 
     /// - returns: the sub-renderer object at the specified index.
-    public func getSubRenderer(index: Int) -> ChartDataRendererBase?
+    open func getSubRenderer(_ index: Int) -> ChartDataRendererBase?
     {
         if (index >= _renderers.count || index < 0)
         {
@@ -150,7 +150,7 @@ public class CombinedChartRenderer: ChartDataRendererBase,
     }
 
     /// Returns all sub-renderers.
-    public var subRenderers: [ChartDataRendererBase]
+    open var subRenderers: [ChartDataRendererBase]
     {
         get { return _renderers }
         set { _renderers = newValue }
@@ -158,249 +158,249 @@ public class CombinedChartRenderer: ChartDataRendererBase,
 
     // MARK: - LineChartRendererDelegate
     
-    public func lineChartRendererData(renderer: LineChartRenderer) -> LineChartData!
+    open func lineChartRendererData(_ renderer: LineChartRenderer) -> LineChartData!
     {
         return _chart.lineData
     }
     
-    public func lineChartRenderer(renderer: LineChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
+    open func lineChartRenderer(_ renderer: LineChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
     {
         return _chart.getTransformer(which)
     }
     
-    public func lineChartRendererFillFormatter(renderer: LineChartRenderer) -> ChartFillFormatter
+    open func lineChartRendererFillFormatter(_ renderer: LineChartRenderer) -> ChartFillFormatter
     {
         return _chart.fillFormatter
     }
     
-    public func lineChartDefaultRendererValueFormatter(renderer: LineChartRenderer) -> NSNumberFormatter!
+    open func lineChartDefaultRendererValueFormatter(_ renderer: LineChartRenderer) -> NumberFormatter!
     {
         return _chart._defaultValueFormatter
     }
     
-    public func lineChartRendererChartYMax(renderer: LineChartRenderer) -> Double
+    open func lineChartRendererChartYMax(_ renderer: LineChartRenderer) -> Double
     {
         return _chart.chartYMax
     }
     
-    public func lineChartRendererChartYMin(renderer: LineChartRenderer) -> Double
+    open func lineChartRendererChartYMin(_ renderer: LineChartRenderer) -> Double
     {
         return _chart.chartYMin
     }
     
-    public func lineChartRendererChartXMax(renderer: LineChartRenderer) -> Double
+    open func lineChartRendererChartXMax(_ renderer: LineChartRenderer) -> Double
     {
         return _chart.chartXMax
     }
     
-    public func lineChartRendererChartXMin(renderer: LineChartRenderer) -> Double
+    open func lineChartRendererChartXMin(_ renderer: LineChartRenderer) -> Double
     {
         return _chart.chartXMin
     }
     
-    public func lineChartRendererMaxVisibleValueCount(renderer: LineChartRenderer) -> Int
+    open func lineChartRendererMaxVisibleValueCount(_ renderer: LineChartRenderer) -> Int
     {
         return _chart.maxVisibleValueCount
     }
     
     // MARK: - BarChartRendererDelegate
     
-    public func barChartRendererData(renderer: BarChartRenderer) -> BarChartData!
+    open func barChartRendererData(_ renderer: BarChartRenderer) -> BarChartData!
     {
         return _chart.barData
     }
     
-    public func barChartRenderer(renderer: BarChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
+    open func barChartRenderer(_ renderer: BarChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
     {
         return _chart.getTransformer(which)
     }
     
-    public func barChartRendererMaxVisibleValueCount(renderer: BarChartRenderer) -> Int
+    open func barChartRendererMaxVisibleValueCount(_ renderer: BarChartRenderer) -> Int
     {
         return _chart.maxVisibleValueCount
     }
     
-    public func barChartDefaultRendererValueFormatter(renderer: BarChartRenderer) -> NSNumberFormatter!
+    open func barChartDefaultRendererValueFormatter(_ renderer: BarChartRenderer) -> NumberFormatter!
     {
         return _chart._defaultValueFormatter
     }
     
-    public func barChartRendererChartYMax(renderer: BarChartRenderer) -> Double
+    open func barChartRendererChartYMax(_ renderer: BarChartRenderer) -> Double
     {
         return _chart.chartYMax
     }
     
-    public func barChartRendererChartYMin(renderer: BarChartRenderer) -> Double
+    open func barChartRendererChartYMin(_ renderer: BarChartRenderer) -> Double
     {
         return _chart.chartYMin
     }
     
-    public func barChartRendererChartXMax(renderer: BarChartRenderer) -> Double
+    open func barChartRendererChartXMax(_ renderer: BarChartRenderer) -> Double
     {
         return _chart.chartXMax
     }
     
-    public func barChartRendererChartXMin(renderer: BarChartRenderer) -> Double
+    open func barChartRendererChartXMin(_ renderer: BarChartRenderer) -> Double
     {
         return _chart.chartXMin
     }
     
-    public func barChartBarBorderLineWidth(renderer: BarChartRenderer) -> CGFloat
+    open func barChartBarBorderLineWidth(_ renderer: BarChartRenderer) -> CGFloat
     {
         return _chart.borderLineWidth
     }
     
-    public func barChartIsDrawHighlightArrowEnabled(renderer: BarChartRenderer) -> Bool
+    open func barChartIsDrawHighlightArrowEnabled(_ renderer: BarChartRenderer) -> Bool
     {
         return drawHighlightArrowEnabled
     }
     
-    public func barChartIsDrawValueHightlightEnabled(renderer: BarChartRenderer) -> Bool {
+    open func barChartIsDrawValueHightlightEnabled(_ renderer: BarChartRenderer) -> Bool {
         return drawValueHighlightedEnabled
     }
     
-    public func barChartIsDrawValueAboveBarEnabled(renderer: BarChartRenderer) -> Bool
+    open func barChartIsDrawValueAboveBarEnabled(_ renderer: BarChartRenderer) -> Bool
     {
         return drawValueAboveBarEnabled
     }
     
-    public func barChartIsDrawBarShadowEnabled(renderer: BarChartRenderer) -> Bool
+    open func barChartIsDrawBarShadowEnabled(_ renderer: BarChartRenderer) -> Bool
     {
         return drawBarShadowEnabled
     }
     
-    public func barChartIsInverted(renderer: BarChartRenderer, axis: ChartYAxis.AxisDependency) -> Bool
+    open func barChartIsInverted(_ renderer: BarChartRenderer, axis: ChartYAxis.AxisDependency) -> Bool
     {
         return _chart.getAxis(axis).isInverted
     }
     
     // MARK: - ScatterChartRendererDelegate
     
-    public func scatterChartRendererData(renderer: ScatterChartRenderer) -> ScatterChartData!
+    open func scatterChartRendererData(_ renderer: ScatterChartRenderer) -> ScatterChartData!
     {
         return _chart.scatterData
     }
     
-    public func scatterChartRenderer(renderer: ScatterChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
+    open func scatterChartRenderer(_ renderer: ScatterChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
     {
         return _chart.getTransformer(which)
     }
     
-    public func scatterChartDefaultRendererValueFormatter(renderer: ScatterChartRenderer) -> NSNumberFormatter!
+    open func scatterChartDefaultRendererValueFormatter(_ renderer: ScatterChartRenderer) -> NumberFormatter!
     {
         return _chart._defaultValueFormatter
     }
     
-    public func scatterChartRendererChartYMax(renderer: ScatterChartRenderer) -> Double
+    open func scatterChartRendererChartYMax(_ renderer: ScatterChartRenderer) -> Double
     {
         return _chart.chartYMax
     }
     
-    public func scatterChartRendererChartYMin(renderer: ScatterChartRenderer) -> Double
+    open func scatterChartRendererChartYMin(_ renderer: ScatterChartRenderer) -> Double
     {
         return _chart.chartYMin
     }
     
-    public func scatterChartRendererChartXMax(renderer: ScatterChartRenderer) -> Double
+    open func scatterChartRendererChartXMax(_ renderer: ScatterChartRenderer) -> Double
     {
         return _chart.chartXMax
     }
     
-    public func scatterChartRendererChartXMin(renderer: ScatterChartRenderer) -> Double
+    open func scatterChartRendererChartXMin(_ renderer: ScatterChartRenderer) -> Double
     {
         return _chart.chartXMin
     }
     
-    public func scatterChartRendererMaxVisibleValueCount(renderer: ScatterChartRenderer) -> Int
+    open func scatterChartRendererMaxVisibleValueCount(_ renderer: ScatterChartRenderer) -> Int
     {
         return _chart.maxVisibleValueCount
     }
     
     // MARK: - CandleStickChartRendererDelegate
     
-    public func candleStickChartRendererCandleData(renderer: CandleStickChartRenderer) -> CandleChartData!
+    open func candleStickChartRendererCandleData(_ renderer: CandleStickChartRenderer) -> CandleChartData!
     {
         return _chart.candleData
     }
     
-    public func candleStickChartRenderer(renderer: CandleStickChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
+    open func candleStickChartRenderer(_ renderer: CandleStickChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
     {
         return _chart.getTransformer(which)
     }
     
-    public func candleStickChartDefaultRendererValueFormatter(renderer: CandleStickChartRenderer) -> NSNumberFormatter!
+    open func candleStickChartDefaultRendererValueFormatter(_ renderer: CandleStickChartRenderer) -> NumberFormatter!
     {
         return _chart._defaultValueFormatter
     }
     
-    public func candleStickChartRendererChartYMax(renderer: CandleStickChartRenderer) -> Double
+    open func candleStickChartRendererChartYMax(_ renderer: CandleStickChartRenderer) -> Double
     {
         return _chart.chartYMax
     }
     
-    public func candleStickChartRendererChartYMin(renderer: CandleStickChartRenderer) -> Double
+    open func candleStickChartRendererChartYMin(_ renderer: CandleStickChartRenderer) -> Double
     {
         return _chart.chartYMin
     }
     
-    public func candleStickChartRendererChartXMax(renderer: CandleStickChartRenderer) -> Double
+    open func candleStickChartRendererChartXMax(_ renderer: CandleStickChartRenderer) -> Double
     {
         return _chart.chartXMax
     }
     
-    public func candleStickChartRendererChartXMin(renderer: CandleStickChartRenderer) -> Double
+    open func candleStickChartRendererChartXMin(_ renderer: CandleStickChartRenderer) -> Double
     {
         return _chart.chartXMin
     }
     
-    public func candleStickChartRendererMaxVisibleValueCount(renderer: CandleStickChartRenderer) -> Int
+    open func candleStickChartRendererMaxVisibleValueCount(_ renderer: CandleStickChartRenderer) -> Int
     {
         return _chart.maxVisibleValueCount
     }
     
     // MARK: - BubbleChartRendererDelegate
     
-    public func bubbleChartRendererData(renderer: BubbleChartRenderer) -> BubbleChartData!
+    open func bubbleChartRendererData(_ renderer: BubbleChartRenderer) -> BubbleChartData!
     {
         return _chart.bubbleData
     }
     
-    public func bubbleChartRenderer(renderer: BubbleChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
+    open func bubbleChartRenderer(_ renderer: BubbleChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
     {
         return _chart.getTransformer(which)
     }
     
-    public func bubbleChartDefaultRendererValueFormatter(renderer: BubbleChartRenderer) -> NSNumberFormatter!
+    open func bubbleChartDefaultRendererValueFormatter(_ renderer: BubbleChartRenderer) -> NumberFormatter!
     {
         return _chart._defaultValueFormatter
     }
     
-    public func bubbleChartRendererChartYMax(renderer: BubbleChartRenderer) -> Double
+    open func bubbleChartRendererChartYMax(_ renderer: BubbleChartRenderer) -> Double
     {
         return _chart.chartYMax
     }
     
-    public func bubbleChartRendererChartYMin(renderer: BubbleChartRenderer) -> Double
+    open func bubbleChartRendererChartYMin(_ renderer: BubbleChartRenderer) -> Double
     {
         return _chart.chartYMin
     }
     
-    public func bubbleChartRendererChartXMax(renderer: BubbleChartRenderer) -> Double
+    open func bubbleChartRendererChartXMax(_ renderer: BubbleChartRenderer) -> Double
     {
         return _chart.chartXMax
     }
     
-    public func bubbleChartRendererChartXMin(renderer: BubbleChartRenderer) -> Double
+    open func bubbleChartRendererChartXMin(_ renderer: BubbleChartRenderer) -> Double
     {
         return _chart.chartXMin
     }
     
-    public func bubbleChartRendererMaxVisibleValueCount(renderer: BubbleChartRenderer) -> Int
+    open func bubbleChartRendererMaxVisibleValueCount(_ renderer: BubbleChartRenderer) -> Int
     {
         return _chart.maxVisibleValueCount
     }
     
-    public func bubbleChartRendererXValCount(renderer: BubbleChartRenderer) -> Int
+    open func bubbleChartRendererXValCount(_ renderer: BubbleChartRenderer) -> Int
     {
         return _chart.data!.xValCount
     }
@@ -408,18 +408,18 @@ public class CombinedChartRenderer: ChartDataRendererBase,
     // MARK: Accessors
     
     /// - returns: true if drawing the highlighting arrow is enabled, false if not
-    public var isDrawHighlightArrowEnabled: Bool { return drawHighlightArrowEnabled; }
+    open var isDrawHighlightArrowEnabled: Bool { return drawHighlightArrowEnabled; }
     
     /// - returns: true if drawing values above bars is enabled, false if not
-    public var isDrawValueAboveBarEnabled: Bool { return drawValueAboveBarEnabled; }
+    open var isDrawValueAboveBarEnabled: Bool { return drawValueAboveBarEnabled; }
     
     /// - returns: true if drawing shadows (maxvalue) for each bar is enabled, false if not
-    public var isDrawBarShadowEnabled: Bool { return drawBarShadowEnabled; }
+    open var isDrawBarShadowEnabled: Bool { return drawBarShadowEnabled; }
     
     /// the order in which the provided data objects should be drawn.
     /// The earlier you place them in the provided array, the further they will be in the background.
     /// e.g. if you provide [DrawOrder.Bar, DrawOrder.Line], the bars will be drawn behind the lines.
-    public var drawOrder: [CombinedChartView.CombinedChartDrawOrder]
+    open var drawOrder: [CombinedChartView.CombinedChartDrawOrder]
     {
         get
         {

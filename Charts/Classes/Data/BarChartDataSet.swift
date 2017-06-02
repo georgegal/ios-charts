@@ -18,15 +18,15 @@ import UIKit
 @objc
 public enum BarChartStrokeStyle: Int
 {
-    case Solid
-    case Dashed
-    case Dotted
+    case solid
+    case dashed
+    case dotted
 }
 
-public class BarChartStakedIndex: NSObject, NSCopying
+open class BarChartStakedIndex: NSObject, NSCopying
 {
-    public var xIndex: Int = 0
-    public var stackIndex: Int = 0
+    open var xIndex: Int = 0
+    open var stackIndex: Int = 0
     
     public override required init()
     {
@@ -42,9 +42,9 @@ public class BarChartStakedIndex: NSObject, NSCopying
     
     // MARK: NSCopying
     
-    public func copyWithZone(zone: NSZone) -> AnyObject
+    open func copy(with zone: NSZone?) -> Any
     {
-        let copy = self.dynamicType.init()
+        let copy = type(of: self).init()
         
         copy.xIndex = xIndex
         copy.stackIndex = stackIndex
@@ -54,16 +54,16 @@ public class BarChartStakedIndex: NSObject, NSCopying
     
     // MARK: Hashable
     
-    public override var hashValue: Int {
+    open override var hashValue: Int {
         return "\(self.xIndex), \(self.stackIndex)".hash
     }
     
-    public override var hash: Int {
+    open override var hash: Int {
         return self.hashValue
     }
     
-    public override func isEqual(object: AnyObject?) -> Bool {
-        return self.xIndex == object?.xIndex && self.stackIndex == object?.stackIndex
+    open override func isEqual(_ object: Any?) -> Bool {
+        return self.xIndex == (object as AnyObject).xIndex && self.stackIndex == (object as AnyObject).stackIndex
     }
 }
 
@@ -71,10 +71,10 @@ public func ==(lhs: BarChartStakedIndex, rhs: BarChartStakedIndex) -> Bool {
     return lhs.xIndex == rhs.xIndex && lhs.stackIndex == rhs.stackIndex
 }
 
-public class BarChartStrokeOption: NSObject
+open class BarChartStrokeOption: NSObject
 {
-    public var strokeColor: UIColor
-    public var strokeStyle: BarChartStrokeStyle
+    open var strokeColor: UIColor
+    open var strokeStyle: BarChartStrokeStyle
     
     public init(strokeColor: UIColor, strokeStyle: BarChartStrokeStyle)
     {
@@ -83,35 +83,35 @@ public class BarChartStrokeOption: NSObject
     }
 }
 
-public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
+open class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
 {
     /// space indicator between the bars in percentage of the whole width of one value (0.15 == 15% of bar width)
-    public var barSpace: CGFloat = 0.15
+    open var barSpace: CGFloat = 0.15
     
     /// the maximum number of bars that are stacked upon each other, this value
     /// is calculated from the Entries that are added to the DataSet
-    private var _stackSize = 1
+    fileprivate var _stackSize = 1
     
     /// the color used for drawing the bar-shadows. The bar shadows is a surface behind the bar that indicates the maximum value
-    public var barShadowColor = UIColor(red: 215.0/255.0, green: 215.0/255.0, blue: 215.0/255.0, alpha: 1.0)
+    open var barShadowColor = UIColor(red: 215.0/255.0, green: 215.0/255.0, blue: 215.0/255.0, alpha: 1.0)
     
     /// bars - stroke options
-    public var strokeOptions = [BarChartStakedIndex : BarChartStrokeOption]()
+    open var strokeOptions = [BarChartStakedIndex : BarChartStrokeOption]()
     
     /// the alpha value (transparency) that is used for drawing the highlight indicator bar. min = 0.0 (fully transparent), max = 1.0 (fully opaque)
-    public var highLightAlpha = CGFloat(120.0 / 255.0)
+    open var highLightAlpha = CGFloat(120.0 / 255.0)
     
     /// the overall entry count, including counting each stack-value individually
-    private var _entryCountStacks = 0
+    fileprivate var _entryCountStacks = 0
     
     /// array of labels used to describe the different values of the stacked bars
-    public var stackLabels: [String] = ["Stack"]
+    open var stackLabels: [String] = ["Stack"]
     
     /// if true, on top of the bars will be displayed first value from the stack only (works with stacked data set)
-    public var displayFirstValueOnly = false
+    open var displayFirstValueOnly = false
     
     /// if true, zero values on x-axis will be displayed
-    public var displayZeroValues = true
+    open var displayZeroValues = true
     
     public required init()
     {
@@ -122,7 +122,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     {
         super.init(yVals: yVals, label: label)
         
-        self.highlightColor = UIColor.blackColor()
+        self.highlightColor = UIColor.black
         
         self.calcStackSize(yVals as! [BarChartDataEntry]?)
         self.calcEntryCountIncludingStacks(yVals as! [BarChartDataEntry]?)
@@ -130,7 +130,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     
     // MARK: NSCopying
     
-    public override func copyWithZone(zone: NSZone) -> AnyObject
+    open override func copyWithZone(_ zone: NSZone?) -> AnyObject
     {
         let copy = super.copyWithZone(zone) as! BarChartDataSet
         copy.barSpace = barSpace
@@ -144,7 +144,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     
     /// Calculates the total number of entries this DataSet represents, including
     /// stacks. All values belonging to a stack are calculated separately.
-    private func calcEntryCountIncludingStacks(yVals: [BarChartDataEntry]!)
+    fileprivate func calcEntryCountIncludingStacks(_ yVals: [BarChartDataEntry]!)
     {
         _entryCountStacks = 0
         
@@ -164,7 +164,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     }
     
     /// calculates the maximum stacksize that occurs in the Entries array of this DataSet
-    private func calcStackSize(yVals: [BarChartDataEntry]!)
+    fileprivate func calcStackSize(_ yVals: [BarChartDataEntry]!)
     {
         for i in 0 ..< yVals.count
         {
@@ -178,7 +178,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     }
     }
     
-    internal override func calcMinMax(start : Int, end: Int)
+    internal override func calcMinMax(_ start : Int, end: Int)
     {
         let yValCount = _yVals.count
         
@@ -201,8 +201,8 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
         _lastStart = start
         _lastEnd = endValue
         
-        _yMin = DBL_MAX
-        _yMax = -DBL_MAX
+        _yMin = Double.greatestFiniteMagnitude
+        _yMax = -Double.greatestFiniteMagnitude
         
         for i in start ... endValue
         {
@@ -238,7 +238,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
             }
         }
         
-        if (_yMin == DBL_MAX)
+        if (_yMin == Double.greatestFiniteMagnitude)
         {
             _yMin = 0.0
             _yMax = 0.0
@@ -246,19 +246,19 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet
     }
     
     /// - returns: the maximum number of bars that can be stacked upon another in this DataSet.
-    public var stackSize: Int
+    open var stackSize: Int
     {
         return _stackSize
     }
     
     /// - returns: true if this DataSet is stacked (stacksize > 1) or not.
-    public var isStacked: Bool
+    open var isStacked: Bool
     {
         return _stackSize > 1 ? true : false
     }
     
     /// - returns: the overall entry count, including counting each stack-value individually
-    public var entryCountStacks: Int
+    open var entryCountStacks: Int
     {
         return _entryCountStacks
     }

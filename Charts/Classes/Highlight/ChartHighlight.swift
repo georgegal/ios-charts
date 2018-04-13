@@ -96,14 +96,16 @@ open class ChartHighlight: NSObject
             return false
         }
         
-        if ((object! as AnyObject).dataSetIndex != _dataSetIndex)
-        {
-            return false
-        }
-        
-        if ((object! as AnyObject).stackIndex != _stackIndex)
-        {
-            return false
+        if let object = object as? ChartHighlight {
+            if (object.dataSetIndex != _dataSetIndex)
+            {
+                return false
+            }
+            
+            if (object.stackIndex != _stackIndex)
+            {
+                return false
+            }
         }
         
         return true

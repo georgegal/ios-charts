@@ -68,14 +68,16 @@ open class ChartSelectionDetail: NSObject
             return false
         }
         
-        if ((object! as AnyObject).dataSetIndex != _dataSetIndex)
-        {
-            return false
-        }
-        
-        if ((object! as AnyObject).dataSet !== _dataSet)
-        {
-            return false
+        if let object =  object as? ChartSelectionDetail {
+            if (object.dataSetIndex != _dataSetIndex)
+            {
+                return false
+            }
+            
+            if (object.dataSet !== _dataSet)
+            {
+                return false
+            }
         }
         
         return true

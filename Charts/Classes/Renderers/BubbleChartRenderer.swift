@@ -195,7 +195,7 @@ open class BubbleChartRenderer: ChartDataRendererBase
                     let valueFont = dataSet.valueFont
                     let lineHeight = valueFont.lineHeight
 
-                    ChartUtils.drawText(context, text: text!, point: CGPoint(x: positions[j].x, y: positions[j].y - ( 0.5 * lineHeight)), align: .center, attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor])
+                    ChartUtils.drawText(context, text: text!, point: CGPoint(x: positions[j].x, y: positions[j].y - ( 0.5 * lineHeight)), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): valueTextColor])
                 }
             }
         }
@@ -301,4 +301,9 @@ open class BubbleChartRenderer: ChartDataRendererBase
         
         context!.restoreGState()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

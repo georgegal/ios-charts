@@ -231,7 +231,7 @@ open class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
                     
                     let text = formatter!.string(from: NSNumber(value: val))
                     
-                    ChartUtils.drawText(context, text: text!, point: CGPoint(x: positions[j].x, y: positions[j].y - shapeSize - lineHeight), align: .center, attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor])
+                    ChartUtils.drawText(context, text: text!, point: CGPoint(x: positions[j].x, y: positions[j].y - shapeSize - lineHeight), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): valueTextColor])
                 }
             }
         }
@@ -298,4 +298,9 @@ open class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
         
         context!.restoreGState()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

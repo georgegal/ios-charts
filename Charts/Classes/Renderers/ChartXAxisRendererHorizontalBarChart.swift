@@ -27,7 +27,7 @@ open class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
         _xAxis.values = xValues
        
         let longest = _xAxis.getLongestLabel() as NSString
-        let longestSize = longest.size(attributes: [NSFontAttributeName: _xAxis.labelFont])
+        let longestSize = longest.size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary([convertFromNSAttributedStringKey(NSAttributedString.Key.font): _xAxis.labelFont]))
         _xAxis.labelWidth = floor(longestSize.width + _xAxis.xOffset * 3.5)
         _xAxis.labelHeight = longestSize.height
     }
@@ -99,7 +99,7 @@ open class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
             
             if (viewPortHandler.isInBoundsY(position.y))
             {
-                drawLabel(context, label: label!, xIndex: i, x: pos, y: position.y - _xAxis.labelHeight / 2.0, align: align, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor])
+                drawLabel(context, label: label!, xIndex: i, x: pos, y: position.y - _xAxis.labelHeight / 2.0, align: align, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): labelFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): labelTextColor])
             }
         }
     }
@@ -268,7 +268,7 @@ open class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
                             x: viewPortHandler.contentRight - xOffset,
                             y: position.y - yOffset),
                         align: .right,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): l.valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): l.valueTextColor])
                 }
                 else if (l.labelPosition == .rightBottom)
                 {
@@ -278,7 +278,7 @@ open class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
                             x: viewPortHandler.contentRight - xOffset,
                             y: position.y + yOffset - labelLineHeight),
                         align: .right,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): l.valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): l.valueTextColor])
                 }
                 else if (l.labelPosition == .leftTop)
                 {
@@ -288,7 +288,7 @@ open class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
                             x: viewPortHandler.contentLeft + xOffset,
                             y: position.y - yOffset),
                         align: .left,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): l.valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): l.valueTextColor])
                 }
                 else
                 {
@@ -298,11 +298,22 @@ open class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
                             x: viewPortHandler.contentLeft + xOffset,
                             y: position.y + yOffset - labelLineHeight),
                         align: .left,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): l.valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): l.valueTextColor])
                 }
             }
         }
         
         context!.restoreGState()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

@@ -59,7 +59,7 @@ open class ChartXAxisRendererRadarChart: ChartXAxisRenderer
             
             let p = ChartUtils.getPosition(center, dist: CGFloat(_chart.yRange) * factor + _xAxis.labelWidth / 2.0, angle: angle)
             
-            drawLabel(context, label: label!, xIndex: i, x: p.x, y: p.y - _xAxis.labelHeight / 2.0, align: .center, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor])
+            drawLabel(context, label: label!, xIndex: i, x: p.x, y: p.y - _xAxis.labelHeight / 2.0, align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): labelFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): labelTextColor])
         }
     }
     
@@ -73,4 +73,9 @@ open class ChartXAxisRendererRadarChart: ChartXAxisRenderer
     {
         /// XAxis LimitLines on RadarChart not yet supported.
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

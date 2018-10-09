@@ -301,13 +301,13 @@ open class ChartViewBase: UIView, ChartAnimatorDelegate
             
             // if no data, inform the user
             
-            ChartUtils.drawText(context, text: noDataText, point: CGPoint(x: frame.width / 2.0, y: frame.height / 2.0), align: .center, attributes: [NSFontAttributeName: infoFont, NSForegroundColorAttributeName: infoTextColor])
+            ChartUtils.drawText(context, text: noDataText, point: CGPoint(x: frame.width / 2.0, y: frame.height / 2.0), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): infoFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): infoTextColor])
             
             if (noDataTextDescription != nil && (noDataTextDescription!).characters.count > 0)
             {   
                 let textOffset = -infoFont.lineHeight / 2.0
                 
-                ChartUtils.drawText(context, text: noDataTextDescription!, point: CGPoint(x: frame.width / 2.0, y: frame.height / 2.0 + textOffset), align: .center, attributes: [NSFontAttributeName: infoFont, NSForegroundColorAttributeName: infoTextColor])
+                ChartUtils.drawText(context, text: noDataTextDescription!, point: CGPoint(x: frame.width / 2.0, y: frame.height / 2.0 + textOffset), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): infoFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): infoTextColor])
             }
             
             return
@@ -344,8 +344,8 @@ open class ChartViewBase: UIView, ChartAnimatorDelegate
             #endif
         }
         
-        attrs[NSFontAttributeName] = font
-        attrs[NSForegroundColorAttributeName] = descriptionTextColor
+        attrs[convertFromNSAttributedStringKey(NSAttributedString.Key.font)] = font
+        attrs[convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor)] = descriptionTextColor
 
         ChartUtils.drawText(context, text: descriptionText, point: CGPoint(x: frame.width - _viewPortHandler.offsetRight - 10.0, y: frame.height - _viewPortHandler.offsetBottom - 10.0 - font!.lineHeight), align: .right, attributes: attrs)
     }
@@ -798,11 +798,11 @@ open class ChartViewBase: UIView, ChartAnimatorDelegate
         switch (format)
         {
         case .png:
-            imageData = UIImagePNGRepresentation(image)
+            imageData = image.pngData()
             break
             
         case .jpeg:
-            imageData = UIImageJPEGRepresentation(image, CGFloat(compressionQuality))
+            imageData = image.jpegData(compressionQuality: CGFloat(compressionQuality))
             break
         }
 
@@ -951,4 +951,9 @@ open class ChartViewBase: UIView, ChartAnimatorDelegate
             super.touchesCancelled(touches!, with: event)
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

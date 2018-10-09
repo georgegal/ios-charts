@@ -156,7 +156,7 @@ open class RadarChartRenderer: LineScatterCandleRadarChartRenderer
                     formatter = defaultValueFormatter
                 }
                 
-                ChartUtils.drawText(context, text: formatter!.string(from: NSNumber(value: e.value))!, point: CGPoint(x: p.x, y: p.y - yoffset - valueFont.lineHeight), align: .center, attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor])
+                ChartUtils.drawText(context, text: formatter!.string(from: NSNumber(value: e.value))!, point: CGPoint(x: p.x, y: p.y - yoffset - valueFont.lineHeight), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): valueTextColor])
             }
         }
     }
@@ -292,4 +292,9 @@ open class RadarChartRenderer: LineScatterCandleRadarChartRenderer
         
         context!.restoreGState()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

@@ -132,7 +132,7 @@ open class ChartLegend: ChartComponentBase
                 continue
             }
             
-            let size = (labels[i] as NSString!).size(attributes: [NSFontAttributeName: font])
+            let size = (labels[i] as NSString!).size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary([convertFromNSAttributedStringKey(NSAttributedString.Key.font): font]))
             
             if (size.width > maxW)
             {
@@ -172,7 +172,7 @@ open class ChartLegend: ChartComponentBase
                     width += formSize + formToTextSpace
                 }
                 
-                let size = (labels[i] as NSString!).size(attributes: [NSFontAttributeName: labelFont])
+                let size = (labels[i] as NSString!).size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary([convertFromNSAttributedStringKey(NSAttributedString.Key.font): labelFont]))
                 
                 width += size.width
                 height += size.height
@@ -272,7 +272,7 @@ open class ChartLegend: ChartComponentBase
             
             // Start calculating layout
             
-            let labelAttrs = [NSFontAttributeName: labelFont]
+            let labelAttrs = [convertFromNSAttributedStringKey(NSAttributedString.Key.font): labelFont]
             var maxLineWidth: CGFloat = 0.0
             var currentLineWidth: CGFloat = 0.0
             var requiredWidth: CGFloat = 0.0
@@ -298,7 +298,7 @@ open class ChartLegend: ChartComponentBase
                 // grouped forms have null labels
                 if (labels[i] != nil)
                 {
-                    calculatedLabelSizes[i] = (labels[i] as NSString!).size(attributes: labelAttrs)
+                    calculatedLabelSizes[i] = (labels[i] as NSString!).size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary(labelAttrs))
                     requiredWidth += drawingForm ? formToTextSpace + formSize : 0.0
                     requiredWidth += calculatedLabelSizes[i].width
                 }
@@ -460,4 +460,15 @@ open class ChartLegend: ChartComponentBase
         self.colorsObjc = colors
         _isLegendCustom = true
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

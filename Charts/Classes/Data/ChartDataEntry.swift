@@ -17,13 +17,13 @@ import Foundation
 open class ChartDataEntry: NSObject
 {
     /// the actual value (y axis)
-    open var value = Double(0.0)
+    @objc open var value = Double(0.0)
     
     /// the index on the x-axis
-    open var xIndex = Int(0)
+    @objc open var xIndex = Int(0)
     
     /// optional spot for additional data this Entry represents
-    open var data: AnyObject?
+    @objc open var data: AnyObject?
     
     public override required init()
     {

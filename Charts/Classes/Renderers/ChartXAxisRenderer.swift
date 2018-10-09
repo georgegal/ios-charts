@@ -39,7 +39,7 @@ open class ChartXAxisRenderer: ChartAxisRendererBase
         
         let widthText = a as NSString
         
-        _xAxis.labelWidth = widthText.size(attributes: [NSFontAttributeName: _xAxis.labelFont]).width
+        _xAxis.labelWidth = widthText.size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary([convertFromNSAttributedStringKey(NSAttributedString.Key.font): _xAxis.labelFont])).width
         _xAxis.labelHeight = _xAxis.labelFont.lineHeight
         _xAxis.values = xValues
     }
@@ -129,9 +129,9 @@ open class ChartXAxisRenderer: ChartAxisRendererBase
         let paraStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paraStyle.alignment = .center
         
-        let labelAttrs = [NSFontAttributeName: _xAxis.labelFont,
-            NSForegroundColorAttributeName: _xAxis.labelTextColor,
-            NSParagraphStyleAttributeName: paraStyle] as [String : Any]
+        let labelAttrs = [convertFromNSAttributedStringKey(NSAttributedString.Key.font): _xAxis.labelFont,
+            convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): _xAxis.labelTextColor,
+            convertFromNSAttributedStringKey(NSAttributedString.Key.paragraphStyle): paraStyle] as [String : Any]
         
         let valueToPixelMatrix = transformer.valueToPixelMatrix
         
@@ -165,7 +165,7 @@ open class ChartXAxisRenderer: ChartAxisRendererBase
                     // avoid clipping of the last
                     if (i == _xAxis.values.count - 1 && _xAxis.values.count > 1)
                     {
-                        let width = labelns.boundingRect(with: labelMaxSize, options: .usesLineFragmentOrigin, attributes: labelAttrs, context: nil).size.width
+                        let width = labelns.boundingRect(with: labelMaxSize, options: .usesLineFragmentOrigin, attributes: convertToOptionalNSAttributedStringKeyDictionary(labelAttrs), context: nil).size.width
                         
                         if (width > viewPortHandler.offsetRight * 2.0
                             && position.x + width > viewPortHandler.chartWidth)
@@ -175,7 +175,7 @@ open class ChartXAxisRenderer: ChartAxisRendererBase
                     }
                     else if (i == 0)
                     { // avoid clipping of the first
-                        let width = labelns.boundingRect(with: labelMaxSize, options: .usesLineFragmentOrigin, attributes: labelAttrs, context: nil).size.width
+                        let width = labelns.boundingRect(with: labelMaxSize, options: .usesLineFragmentOrigin, attributes: convertToOptionalNSAttributedStringKeyDictionary(labelAttrs), context: nil).size.width
                         position.x += width / 2.0
                     }
                 }
@@ -298,7 +298,7 @@ open class ChartXAxisRenderer: ChartAxisRendererBase
                             x: position.x + xOffset,
                             y: viewPortHandler.contentTop + yOffset),
                         align: .left,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): l.valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): l.valueTextColor])
                 }
                 else if (l.labelPosition == .rightBottom)
                 {
@@ -308,7 +308,7 @@ open class ChartXAxisRenderer: ChartAxisRendererBase
                             x: position.x + xOffset,
                             y: viewPortHandler.contentBottom - labelLineHeight - yOffset),
                         align: .left,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): l.valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): l.valueTextColor])
                 }
                 else if (l.labelPosition == .leftTop)
                 {
@@ -318,7 +318,7 @@ open class ChartXAxisRenderer: ChartAxisRendererBase
                             x: position.x - xOffset,
                             y: viewPortHandler.contentTop + yOffset),
                         align: .right,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): l.valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): l.valueTextColor])
                 }
                 else
                 {
@@ -328,11 +328,22 @@ open class ChartXAxisRenderer: ChartAxisRendererBase
                             x: position.x - xOffset,
                             y: viewPortHandler.contentBottom - labelLineHeight - yOffset),
                         align: .right,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): l.valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): l.valueTextColor])
                 }
             }
         }
         
         context!.restoreGState()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

@@ -503,7 +503,7 @@ open class BarChartRenderer: ChartDataRendererBase
     /// Draws a value at the specified x and y position.
     internal func drawValue(_ context: CGContext?, value: String, xPos: CGFloat, yPos: CGFloat, font: UIFont, align: NSTextAlignment, color: UIColor)
     {
-        ChartUtils.drawText(context, text: value, point: CGPoint(x: xPos, y: yPos), align: align, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: color])
+        ChartUtils.drawText(context, text: value, point: CGPoint(x: xPos, y: yPos), align: align, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): font, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): color])
     }
     
     open override func drawExtras(_ context: CGContext?)
@@ -698,4 +698,9 @@ open class BarChartRenderer: ChartDataRendererBase
         let lineWidth = delegate!.barChartBarBorderLineWidth(self)
         context!.stroke(rect.insetBy(dx: lineWidth, dy: 0))
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

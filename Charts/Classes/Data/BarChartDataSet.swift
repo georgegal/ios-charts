@@ -25,8 +25,8 @@ public enum BarChartStrokeStyle: Int
 
 open class BarChartStakedIndex: NSObject, NSCopying
 {
-    open var xIndex: Int = 0
-    open var stackIndex: Int = 0
+    @objc open var xIndex: Int = 0
+    @objc open var stackIndex: Int = 0
     
     public override required init()
     {

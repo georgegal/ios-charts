@@ -199,20 +199,20 @@ open class PieChartRenderer: ChartDataRendererBase
                 // draw everything, depending on settings
                 if (drawXVals && drawYVals)
                 {
-                    ChartUtils.drawText(context, text: val, point: CGPoint(x: x, y: y), align: .center, attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor])
+                    ChartUtils.drawText(context, text: val, point: CGPoint(x: x, y: y), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): valueTextColor])
                     
                     if (j < data.xValCount && data.xVals[j] != nil)
                     {
-                        ChartUtils.drawText(context, text: data.xVals[j]!, point: CGPoint(x: x, y: y + lineHeight), align: .center, attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor])
+                        ChartUtils.drawText(context, text: data.xVals[j]!, point: CGPoint(x: x, y: y + lineHeight), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): valueTextColor])
                     }
                 }
                 else if (drawXVals && !drawYVals)
                 {
-                    ChartUtils.drawText(context, text: data.xVals[j]!, point: CGPoint(x: x, y: y + lineHeight / 2.0), align: .center, attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor])
+                    ChartUtils.drawText(context, text: data.xVals[j]!, point: CGPoint(x: x, y: y + lineHeight / 2.0), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): valueTextColor])
                 }
                 else if (!drawXVals && drawYVals)
                 {
-                    ChartUtils.drawText(context, text: val, point: CGPoint(x: x, y: y + lineHeight / 2.0), align: .center, attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor])
+                    ChartUtils.drawText(context, text: val, point: CGPoint(x: x, y: y + lineHeight / 2.0), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): valueFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): valueTextColor])
                 }
                 
                 cnt += 1
@@ -280,9 +280,9 @@ open class PieChartRenderer: ChartDataRendererBase
             paragraphStyle.lineBreakMode = centerTextLineBreakMode
             paragraphStyle.alignment = .center
             
-            let drawingAttrs = [NSFontAttributeName: centerTextFont, NSParagraphStyleAttributeName: paragraphStyle, NSForegroundColorAttributeName: centerTextColor] as [String : Any]
+            let drawingAttrs = [convertFromNSAttributedStringKey(NSAttributedString.Key.font): centerTextFont, convertFromNSAttributedStringKey(NSAttributedString.Key.paragraphStyle): paragraphStyle, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): centerTextColor] as [String : Any]
             
-            let textBounds = centerTextNs.boundingRect(with: boundingRect.size, options: [.usesLineFragmentOrigin, .usesFontLeading, .truncatesLastVisibleLine], attributes: drawingAttrs, context: nil)
+            let textBounds = centerTextNs.boundingRect(with: boundingRect.size, options: [.usesLineFragmentOrigin, .usesFontLeading, .truncatesLastVisibleLine], attributes: convertToOptionalNSAttributedStringKeyDictionary(drawingAttrs), context: nil)
             
             var drawingRect = boundingRect
             drawingRect.origin.x += (boundingRect.size.width - textBounds.size.width) / 2.0
@@ -296,7 +296,7 @@ open class PieChartRenderer: ChartDataRendererBase
             context!.addPath(clippingPath)
             context!.clip()
             
-            centerTextNs.draw(with: drawingRect, options: [.usesLineFragmentOrigin, .usesFontLeading, .truncatesLastVisibleLine], attributes: drawingAttrs, context: nil)
+            centerTextNs.draw(with: drawingRect, options: [.usesLineFragmentOrigin, .usesFontLeading, .truncatesLastVisibleLine], attributes: convertToOptionalNSAttributedStringKeyDictionary(drawingAttrs), context: nil)
             
             context!.restoreGState()
         }
@@ -395,4 +395,15 @@ open class PieChartRenderer: ChartDataRendererBase
         
         context!.restoreGState()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

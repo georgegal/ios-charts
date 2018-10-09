@@ -179,7 +179,7 @@ open class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             
             let label = _yAxis.getFormattedLabel(j)
             
-            ChartUtils.drawText(context, text: label, point: CGPoint(x: p.x + 10.0, y: p.y - labelLineHeight), align: .left, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor])
+            ChartUtils.drawText(context, text: label, point: CGPoint(x: p.x + 10.0, y: p.y - labelLineHeight), align: .left, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): labelFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): labelTextColor])
         }
     }
     
@@ -242,4 +242,9 @@ open class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         
         context!.restoreGState()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

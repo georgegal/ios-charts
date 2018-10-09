@@ -34,7 +34,7 @@ open class ChartSelectionDetail: NSObject
         _dataSet = dataSet
     }
     
-    open var value: Double
+    @objc open var value: Double
     {
         return _value
     }

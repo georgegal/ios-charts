@@ -639,7 +639,7 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
             return
         }
         
-        if (recognizer.state == UIGestureRecognizerState.ended)
+        if (recognizer.state == UIGestureRecognizer.State.ended)
         {
             let h = getHighlightByTouchPoint(recognizer.location(in: self))
             
@@ -665,7 +665,7 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
             return
         }
         
-        if (recognizer.state == UIGestureRecognizerState.ended)
+        if (recognizer.state == UIGestureRecognizer.State.ended)
         {
             if (!_dataNotSet && _doubleTapToZoomEnabled)
             {
@@ -689,7 +689,7 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     #if !os(tvOS)
     @objc fileprivate func pinchGestureRecognized(_ recognizer: UIPinchGestureRecognizer)
     {
-        if (recognizer.state == UIGestureRecognizerState.began)
+        if (recognizer.state == UIGestureRecognizer.State.began)
         {
             stopDeceleration()
             
@@ -717,8 +717,8 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                 }
             }
         }
-        else if (recognizer.state == UIGestureRecognizerState.ended ||
-            recognizer.state == UIGestureRecognizerState.cancelled)
+        else if (recognizer.state == UIGestureRecognizer.State.ended ||
+            recognizer.state == UIGestureRecognizer.State.cancelled)
         {
             if (_isScaling)
             {
@@ -729,7 +729,7 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                 setNeedsDisplay()
             }
         }
-        else if (recognizer.state == UIGestureRecognizerState.changed)
+        else if (recognizer.state == UIGestureRecognizer.State.changed)
         {
             let isZoomingOut = (recognizer.scale < 1)
             let canZoomMoreX = isZoomingOut ? _viewPortHandler.canZoomOutMoreX : _viewPortHandler.canZoomInMoreX
@@ -775,7 +775,7 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     
     @objc fileprivate func panGestureRecognized(_ recognizer: UIPanGestureRecognizer)
     {
-        if (recognizer.state == UIGestureRecognizerState.began && recognizer.numberOfTouches > 0)
+        if (recognizer.state == UIGestureRecognizer.State.began && recognizer.numberOfTouches > 0)
         {
             stopDeceleration()
             
@@ -810,7 +810,7 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                 _lastPanPoint = recognizer.translation(in: self)
             }
         }
-        else if (recognizer.state == UIGestureRecognizerState.changed)
+        else if (recognizer.state == UIGestureRecognizer.State.changed)
         {
             if (_isDragging)
             {
@@ -836,11 +836,11 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                 }
             }
         }
-        else if (recognizer.state == UIGestureRecognizerState.ended || recognizer.state == UIGestureRecognizerState.cancelled)
+        else if (recognizer.state == UIGestureRecognizer.State.ended || recognizer.state == UIGestureRecognizer.State.cancelled)
         {
             if (_isDragging)
             {
-                if (recognizer.state == UIGestureRecognizerState.ended && isDragDecelerationEnabled)
+                if (recognizer.state == UIGestureRecognizer.State.ended && isDragDecelerationEnabled)
                 {
                     stopDeceleration()
                     
@@ -848,7 +848,7 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
                     _decelerationVelocity = recognizer.velocity(in: self)
                     
                     _decelerationDisplayLink = CADisplayLink(target: self, selector: #selector(BarLineChartViewBase.decelerationLoop))
-                    _decelerationDisplayLink.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
+                    _decelerationDisplayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
                 }
                 
                 _isDragging = false
@@ -898,7 +898,7 @@ open class BarLineChartViewBase: ChartViewBase, UIGestureRecognizerDelegate
     {
         if (_decelerationDisplayLink !== nil)
         {
-            _decelerationDisplayLink.remove(from: RunLoop.main, forMode: RunLoopMode.commonModes)
+            _decelerationDisplayLink.remove(from: RunLoop.main, forMode: RunLoop.Mode.common)
             _decelerationDisplayLink = nil
         }
     }

@@ -122,15 +122,15 @@ internal class ChartUtils
         var point = point
         if (align == .center)
         {
-            point.x -= text.size(attributes: attributes).width / 2.0
+            point.x -= text.size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary(attributes)).width / 2.0
         }
         else if (align == .right)
         {
-            point.x -= text.size(attributes: attributes).width
+            point.x -= text.size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary(attributes)).width
         }
     
         UIGraphicsPushContext(context!)
-        (text as NSString).draw(at: point, withAttributes: attributes)
+        (text as NSString).draw(at: point, withAttributes: convertToOptionalNSAttributedStringKeyDictionary(attributes))
         UIGraphicsPopContext()
     }
     
@@ -150,13 +150,13 @@ internal class ChartUtils
         }
         
         UIGraphicsPushContext(context!)
-        (text as NSString).draw(with: rect, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        (text as NSString).draw(with: rect, options: .usesLineFragmentOrigin, attributes: convertToOptionalNSAttributedStringKeyDictionary(attributes), context: nil)
         UIGraphicsPopContext()
     }
     
     internal class func drawMultilineText(_ context: CGContext?, text: String, point: CGPoint, align: NSTextAlignment, attributes: [String : AnyObject]?, constrainedToSize: CGSize)
     {
-        let rect = text.boundingRect(with: constrainedToSize, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        let rect = text.boundingRect(with: constrainedToSize, options: .usesLineFragmentOrigin, attributes: convertToOptionalNSAttributedStringKeyDictionary(attributes), context: nil)
         drawMultilineText(context, text: text, knownTextSize: rect.size, point: point, align: align, attributes: attributes, constrainedToSize: constrainedToSize)
     }
     
@@ -228,4 +228,10 @@ internal class ChartUtils
         }
         return newArray
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

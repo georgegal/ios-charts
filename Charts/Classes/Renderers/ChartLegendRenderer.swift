@@ -352,7 +352,7 @@ open class ChartLegendRenderer: ChartRendererBase
                     
                     if (direction == .rightToLeft)
                     {
-                        x -= (labels[i] as NSString!).size(attributes: [NSFontAttributeName: labelFont]).width
+                        x -= (labels[i] as NSString!).size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary([convertFromNSAttributedStringKey(NSAttributedString.Key.font): labelFont])).width
                     }
                     
                     if (!wasStacked)
@@ -426,6 +426,17 @@ open class ChartLegendRenderer: ChartRendererBase
     /// Draws the provided label at the given position.
     internal func drawLabel(_ context: CGContext?, x: CGFloat, y: CGFloat, label: String, font: UIFont, textColor: UIColor)
     {
-        ChartUtils.drawText(context, text: label, point: CGPoint(x: x, y: y), align: .left, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: textColor])
+        ChartUtils.drawText(context, text: label, point: CGPoint(x: x, y: y), align: .left, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): font, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): textColor])
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

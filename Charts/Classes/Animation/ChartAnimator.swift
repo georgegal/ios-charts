@@ -66,7 +66,7 @@ open class ChartAnimator: NSObject
     {
         if (_displayLink != nil)
         {
-            _displayLink.remove(from: RunLoop.main, forMode: RunLoopMode.commonModes)
+            _displayLink.remove(from: RunLoop.main, forMode: RunLoop.Mode.common)
             _displayLink = nil
             
             _enabledX = false
@@ -174,7 +174,7 @@ open class ChartAnimator: NSObject
         
         if (_enabledX || _enabledY)
         {
-            _displayLink.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
+            _displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
         }
     }
     

@@ -66,7 +66,7 @@ open class ChartHighlight: NSObject
     }
 
     open var dataSetIndex: Int { return _dataSetIndex; }
-    open var xIndex: Int { return _xIndex; }
+    @objc open var xIndex: Int { return _xIndex; }
     open var stackIndex: Int { return _stackIndex; }
     
     /// - returns: the range of values the selected value of a stacked bar is in. (this is only relevant for stacked-barchart)
